@@ -1,5 +1,7 @@
-﻿using Quhinja.Services.Models.InputModels.Dish;
+﻿using Quhinja.Services.Mappings.InputMappings;
+using Quhinja.Services.Models.InputModels.Dish;
 using Quhinja.Services.Models.InputModels.Recipe;
+using Quhinja.Services.Models.OutputModels;
 using Quhinja.Services.Models.OutputModels.Dish;
 using System;
 using System.Collections.Generic;
@@ -20,8 +22,8 @@ namespace Quhinja.Services.Interfaces
         Task<ICollection<DishWithRecipesOutputModel>> GetDishesWithRecipesAsync();
 
         Task<int> AddDishAsync(DishBasicInputModel model);
-
-
+        Task<int> AddCommentAsync(UsersCommentForDishInputModel model);
+        Task<ICollection<CommentBasicOutputModel>> GetCommentsForDish(int dishId);
         Task<float?> RateDishAsync(UsersRatingForDishInputModel model);
 
         Task<ICollection<DishBasicOutputModel>> GetSortedDishesAsync();

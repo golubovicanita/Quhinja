@@ -13,7 +13,7 @@ namespace Quhinja.Services.Interfaces
         Task<UserInfoOutputModel> GetUserAsync(int id);
         Task UpdateUserAsync(UserUpdateInputModel model, int userId);
         Task<int> GetRatingForUser(int id, int dishId);
-       // Task<int> GetCommentForUser(int id, int dishId);
+        Task<string> GetCommentForUser(int id, int dishId);
 
         Task<IEnumerable<UserInfoOutputModel>> GetTodayBirthUsers();
         Task<IEnumerable<UserInfoOutputModel>> GetTodayEmployeeDateUsers();

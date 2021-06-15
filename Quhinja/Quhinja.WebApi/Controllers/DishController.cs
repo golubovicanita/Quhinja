@@ -2,12 +2,15 @@
 using Microsoft.AspNetCore.Mvc;
 using Quhinja.Services.Implementations;
 using Quhinja.Services.Interfaces;
+using Quhinja.Services.Mappings.InputMappings;
 using Quhinja.Services.Models.InputModels.Dish;
 using Quhinja.Services.Models.InputModels.Recipe;
+using Quhinja.Services.Models.OutputModels;
 using Quhinja.Services.Models.OutputModels.Dish;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Quhinja.WebApi.Controllers
@@ -57,6 +60,20 @@ namespace Quhinja.WebApi.Controllers
             if (ModelState.IsValid)
             {
                 var id = await dishService.AddDishAsync(dishInputModel);
+                return Ok(id);
+            }
+            else
+                return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).ToList());
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("addComment")]
+        public async Task<ActionResult<int>> AddCommentAsync([FromBody] UsersCommentForDishInputModel comInputModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var id = await dishService.AddCommentAsync(comInputModel);
                 return Ok(id);
             }
             else
@@ -139,5 +156,15 @@ namespace Quhinja.WebApi.Controllers
             var dishOutputModel = await dishService.GetSortedDishesAsync();
             return Ok(dishOutputModel);
         }
+
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("getCommentsForDish/{dishId}")]
+        public async Task<ActionResult<ICollection<CommentBasicOutputModel>>> GetCommentsForDish([FromRoute] int dishId)
+        {
+            return Ok( dishService.GetCommentsForDish(dishId));
+           
+        }
     }
 }
+

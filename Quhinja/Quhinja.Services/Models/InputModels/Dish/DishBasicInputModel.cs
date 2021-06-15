@@ -15,7 +15,7 @@ namespace Quhinja.Services.Models.InputModels.Dish
 
         public string Description { get; set; }
 
-
+        public bool Rate { get; set; }
 
         public string DishType { get; set; }
 

@@ -21,6 +21,9 @@ namespace Quhinja.Data
 
         public DbSet<UsersRatingForDish> UsersRatingForDishes { get; set; }
 
+        public DbSet<UserCommentsForDish> UsersCommentForDishes { get; set; }
+
+        public DbSet<UserCommentsForDish> CommentsForDish { get; set; }
         public DbSet<MissedLunch> MissedLunches { get; set; }
 
         public QuhinjaDbContext(DbContextOptions<QuhinjaDbContext> options)

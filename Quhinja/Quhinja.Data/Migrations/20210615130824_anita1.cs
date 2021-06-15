@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Quhinja.Data.Migrations
 {
-    public partial class anita : Migration
+    public partial class anita1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -88,6 +88,7 @@ namespace Quhinja.Data.Migrations
                     Description = table.Column<string>(nullable: true),
                     selectedRecipeId = table.Column<int>(nullable: false),
                     selectedRecipeId1 = table.Column<int>(nullable: true),
+                    Rate = table.Column<string>(nullable: true),
                     averageRating = table.Column<float>(nullable: true),
                     DishType = table.Column<string>(maxLength: 50, nullable: true)
                 },
@@ -235,6 +236,32 @@ namespace Quhinja.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserCommentsForDish",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(nullable: false),
+                    DishId = table.Column<int>(nullable: false),
+                    com = table.Column<string>(nullable: true),
+                    DateOfComment = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserCommentsForDish", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserCommentsForDish_Dishes_DishId",
+                        column: x => x.DishId,
+                        principalTable: "Dishes",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_UserCommentsForDish_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserLogins",
                 columns: table => new
                 {
@@ -326,17 +353,17 @@ namespace Quhinja.Data.Migrations
             migrationBuilder.InsertData(
                 table: "Roles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName", "RoleDescription" },
-                values: new object[] { 1, "633e2818-410a-4569-9b02-23c2e0537a41", "admin", "ADMIN", "admin" });
+                values: new object[] { 1, "9e181ba6-daeb-4604-ac76-dbd89446d645", "admin", "ADMIN", "admin" });
 
             migrationBuilder.InsertData(
                 table: "Roles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName", "RoleDescription" },
-                values: new object[] { 2, "860463f3-8cd2-483b-a780-878251b0a9a1", "user", "USER", "user" });
+                values: new object[] { 2, "cfe4f882-5198-446c-aa89-e8e7476fbac7", "user", "USER", "user" });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "DateOfBirth", "DateOfEmployment", "Email", "EmailConfirmed", "FavouriteDishId", "Gender", "Image", "LockoutEnabled", "LockoutEnd", "Name", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "Position", "ProfilePictureUrl", "SecurityStamp", "Surname", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 1, 0, "1e3997d6-6901-4a5a-ae61-dc67ecae774e", new DateTime(2021, 6, 8, 10, 51, 12, 993, DateTimeKind.Local).AddTicks(5445), new DateTime(2021, 6, 8, 10, 51, 13, 6, DateTimeKind.Local).AddTicks(6387), "srdjan.arsic@quadrixsoft.com", false, null, 1, null, true, null, "Srdjan", "SRDJAN.ARSIC@QUADRIXSOFT.COM", "ADM", "AQAAAAEAACcQAAAAELVcpiFzbc+pNTWWEBIXRKHvCaoWR65ihDzBGmGTwqAWU5kcy7KVDHLS+YSPTycg7w==", null, false, null, null, "5TBB7CACI3F2JOD25JGXSNQASZ2NWHRK", "Arsic", false, "adm" });
+                values: new object[] { 1, 0, "52226afd-d415-4abb-951b-7ef35e3d4e2b", new DateTime(2021, 6, 15, 15, 8, 21, 910, DateTimeKind.Local).AddTicks(1085), new DateTime(2021, 6, 15, 15, 8, 21, 925, DateTimeKind.Local).AddTicks(6959), "srdjan.arsic@quadrixsoft.com", false, null, 1, null, true, null, "Srdjan", "SRDJAN.ARSIC@QUADRIXSOFT.COM", "ADM", "AQAAAAEAACcQAAAAELVcpiFzbc+pNTWWEBIXRKHvCaoWR65ihDzBGmGTwqAWU5kcy7KVDHLS+YSPTycg7w==", null, false, null, null, "5TBB7CACI3F2JOD25JGXSNQASZ2NWHRK", "Arsic", false, "adm" });
 
             migrationBuilder.InsertData(
                 table: "UserRoles",
@@ -401,6 +428,16 @@ namespace Quhinja.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserCommentsForDish_DishId",
+                table: "UserCommentsForDish",
+                column: "DishId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserCommentsForDish_UserId",
+                table: "UserCommentsForDish",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserLogins_UserId",
                 table: "UserLogins",
                 column: "UserId");
@@ -462,6 +499,9 @@ namespace Quhinja.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserClaims");
+
+            migrationBuilder.DropTable(
+                name: "UserCommentsForDish");
 
             migrationBuilder.DropTable(
                 name: "UserLogins");

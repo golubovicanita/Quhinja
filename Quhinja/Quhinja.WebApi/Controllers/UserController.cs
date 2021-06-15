@@ -68,10 +68,10 @@ namespace Quhinja.WebApi.Controllers
     }
 
         //dodato
-       /* [Authorize(Roles = "user")]
+        [Authorize(Roles = "user")]
         [HttpGet]
         [Route("getCommentForUser/{dishId}")]
-        public async Task<ActionResult<int>> GetCommentForUser([FromRoute] int dishId)
+        public async Task<ActionResult<string>> GetCommentForUser([FromRoute] int dishId)
         {
 
             int usersId;
@@ -79,9 +79,9 @@ namespace Quhinja.WebApi.Controllers
             int.TryParse(userIdstring, out usersId);
 
             var user = await userService.GetUserAsync(usersId);
-            int comment = await userService.GetCommentForUser(usersId, dishId);
+            var comment = await userService.GetCommentForUser(usersId, dishId);
             return comment;
-        }*/
+        }
         [Authorize(Roles = "admin,user")]
 
         [HttpGet]

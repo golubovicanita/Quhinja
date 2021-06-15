@@ -41,10 +41,10 @@ namespace Quhinja.Data.Configuration.EntitiesConfiguration
                .HasForeignKey(rat => rat.DishId)
                .OnDelete(DeleteBehavior.NoAction);
 
-            /*builder.HasMany(dish => dish.UsersComments)
+            builder.HasMany(dish => dish.UsersComments)
                .WithOne(rat => rat.Dish)
                .HasForeignKey(rat => rat.DishId)
-               .OnDelete(DeleteBehavior.NoAction);*/
+               .OnDelete(DeleteBehavior.NoAction);
 
         }
 

@@ -4,8 +4,10 @@ using Quhinja.Data;
 using Quhinja.Data.Entiities;
 using Quhinja.Data.Entiities.Quhinja.Data.Entiities;
 using Quhinja.Services.Interfaces;
+using Quhinja.Services.Mappings.InputMappings;
 using Quhinja.Services.Models.InputModels.Dish;
 using Quhinja.Services.Models.InputModels.Recipe;
+using Quhinja.Services.Models.OutputModels;
 using Quhinja.Services.Models.OutputModels.Dish;
 using System;
 using System.Collections.Generic;
@@ -37,6 +39,17 @@ namespace Quhinja.Services.Implementations
             await data.Dishes.AddAsync(dish);
             data.SaveChanges();
             return dish.Id;
+        }
+        public async Task<int> AddCommentAsync(UsersCommentForDishInputModel model)
+        {
+            if (model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+            var comment = mapper.Map<UserCommentsForDish>(model);
+            await data.UsersCommentForDishes.AddAsync(comment);
+            data.SaveChanges();
+            return comment.Id;
         }
        
         public async  Task<DishWithRecipesOutputModel> GetDishByIdAsync(int id)
@@ -153,6 +166,13 @@ namespace Quhinja.Services.Implementations
             await data.SaveChangesAsync();
 
             return recipe.Id;
+        }
+        public async Task<ICollection<CommentBasicOutputModel>> GetCommentsForDish(int dishId)
+        {
+
+            return await data.CommentsForDish.Where(x=>x.DishId==dishId)
+                          .Select(r => mapper.Map<CommentBasicOutputModel>(r))
+                          .ToListAsync();
         }
     }
 }

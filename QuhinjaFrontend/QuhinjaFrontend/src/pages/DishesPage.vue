@@ -105,11 +105,7 @@
         </q-card-section>
 
         <q-card-section class="q-pt-none">
-          <q-form
-            ref="form"
-            class="full-width column q-gutter-y-md"
-            @submit="handleSubmitRegisterForm"
-          >
+          <q-form ref="form" class="full-width column q-gutter-y-md">
             <div class="name forma">
               <q-separator></q-separator>
               <div
@@ -157,37 +153,100 @@
                   </q-file>
                 </div>
               </div>
+              <div
+                class="
+                  row
+                  justify-around
+                  text-weight-medium text-h6
+                  name
+                  q-mt-lg
+                "
+                style="height: 35px"
+              >
+                <div class="col-6">Vreme pripreme</div>
+                <div class="col-6">
+                  <div>Link za recept</div>
+                </div>
+              </div>
+              <div class="row text-h8 name q-py-md">
+                <div class="col-6">
+                  <div class="row justify-between">
+                    <div class="col-4 q-pr-sm">
+                      <q-item-label>h</q-item-label>
+                      <q-input
+                        v-model.number="sati"
+                        type="number"
+                        filled
+                      />
+                    </div>
+                    <div class="col-4 q-pr-sm">
+                      <q-item-label>min</q-item-label>
+                      <q-input
+                        v-model.number="min"
+                        type="number"
+                        filled
+                      />
+                    </div>
+                    <div class="col-4 q-pr-sm">
+                      <q-item-label>sek</q-item-label>
+                      <q-input
+                        v-model.number="sek"
+                        type="number"
+                        filled
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6 q-pt-md">
+                  <q-input v-model="link" filled />
+                </div>
+              </div>
               <div class="row text-h6 name">
                 <div class="col-6">Dozvoli ocenjivanje jela</div>
                 <div class="col-6">Da li je jelo ljuto?</div>
               </div>
               <div class="row justify-start text-h6 name">
                 <div class="col-6">
-                  <!--<q-option-group
-                    v-model="group"
-                    :options="options"
-                    color="brown-4"
-                    inline
-                    class="text-subtitle1"
-                  />-->
-                  <q-radio color="brown-7" class="q-pr-sm" dense v-model="ocena" val="Da" label="Da"/>
-                  <q-radio color="brown-7" dense v-model="ocena" val="Ne" label="Ne"/>
+                  <q-radio
+                    color="brown-7"
+                    class="q-pr-sm"
+                    dense
+                    v-model="ocena"
+                    val="Da"
+                    label="Da"
+                    
+
+
+                  />
+                  <q-radio
+                    color="brown-7"
+                    dense
+                    v-model="ocena"
+                    val="Ne"
+                    label="Ne"
+                  />
                 </div>
                 <div class="col-6">
-                  <!--<q-option-group
-                    v-model="group1"
-                    :options="options1"
-                    color="brown-4"
-                    inline
-                    class="text-subtitle1"
-                  />-->
-                  <q-radio class="q-pr-sm" color="brown-7" dense v-model="dishType" val="Da" label="Da"/>
-                  <q-radio color="brown-7" dense v-model="dishType" val="Ne" label="Ne"/>
+                  <q-radio
+                    class="q-pr-sm"
+                    color="brown-7"
+                    dense
+                    v-model="dishType"
+                    val="Ljuto"
+                    label="Da"
+                  />
+                  <q-radio
+                    color="brown-7"
+                    dense
+                    v-model="dishType"
+                    val="Neljuto"
+                    label="Ne"
+                  />
                 </div>
               </div>
-              <label class="text-h6 name q-pt-sm">Sastojci</label>
+              <label class="text-h6 name q-pt-md">Sastojci</label>
               <div class="row text-h6 name">
-                <div v-for="(sastojak, index) in sastojci" :key="sastojak">
+                <div v-for="(el, index) in nizSastojaka" :key="el">
                   <div class="row justify-around q-pa-sm">
                     <q-btn
                       align="around"
@@ -195,35 +254,53 @@
                       text-color="brown-8"
                       color="grey-2"
                       @click="removeElement(index)"
-                      >{{ sastojak }}
+                      >{{ el }}
                       <div class="q-pb-md q-pl-md">x</div>
                     </q-btn>
                   </div>
                 </div>
               </div>
-              <div class="row text-h6 name q-py-md">
-                <div style="max-width: 200px">
+              <div class="row justify-between text-h6 name q-py-md">
+                <div class="col-4 q-pr-sm">
+                  <q-input filled v-model="imeSastojka" label="Sastojak" />
+                </div>
+                <div class="col-3 q-pr-sm">
+                  <q-input filled v-model="kolicina" label="Kolicina " />
+                </div>
+                <div class="col-4 q-pr-sm">
                   <q-input
                     filled
-                    v-model="imeSastojka"
-                    label="Napisi ime sastojka"
+                    v-model="mernaJedinica"
+                    label="Merna jedinica"
                   />
                 </div>
-                <div class="q-pt-sm q-pl-sm" @click="addsastojak">
+                <div class="q-pt-sm q-pl-sm col-1" @click="addsastojak">
                   <q-img class="pic" src="../../public/add.png" />
                 </div>
               </div>
               <label class="text-h6 name q-py-sm">Opis jela</label>
               <div class="q-pt-md">
-                <q-input filled v-model="opis" label="Napisi nesto o jelu..." />
+                <q-input
+                  v-model="opis"
+                  filled
+                  type="textarea"
+                  label="Napisi nesto o jelu..."
+                />
               </div>
             </div>
+
+            <q-card-actions align="right" class="bg-white text-teal">
+              <q-btn
+                class="backBtn"
+              
+                flat
+                label="Dodaj jelo i recept"
+                @click="addDish"
+                v-close-popup
+              />
+            </q-card-actions>
           </q-form>
         </q-card-section>
-
-        <q-card-actions align="right" class="bg-white text-teal">
-          <q-btn class="backBtn" flat label="Dodaj jelo" v-close-popup />
-        </q-card-actions>
       </q-card>
     </q-dialog>
   </div>
@@ -236,13 +313,19 @@ export default {
   mixins: [formRulesMixin],
   data() {
     return {
-      dishType: "Da",
-      ocena:"Da",
+      dishType: "Ljuto",
+      ocena: "Da",
       model: null,
       ratingModel: 0,
       visibleAddDishForm: false,
       dishes: [],
       sastojci: [],
+      merneJedinice: [],
+      kolicine: [],
+      kolicina: "",
+      ocenjivanje: true, 
+      mernaJedinica: "",
+      nizSastojaka: [],
       sortingOptions: [],
       sortingOption: "",
       dishesForView: [],
@@ -254,15 +337,15 @@ export default {
       userData: {},
       sortBool: false,
       imeSastojka: "",
-      descriptionDish: "",
-      formData: {
-       
         name: "",
         image: "",
         picture: "",
-        
         opis: "",
-      },
+        link: "",
+        min: 0,
+        sati: 0,
+        sek: 0,
+      
     };
   },
   computed: {
@@ -304,13 +387,56 @@ export default {
     handleClick(id) {
       this.$router.push("dish/" + id);
     },
+    addDish() {
+      const dataDish = {
+        name: this.name,
+        description: this.opis,
+        
+        rate: this.ocena,
+        dishType: this.dishType,
+        
+        
+      };
+      console.log(dataDish);
+
+       this.$store
+         .dispatch("apiRequest/postApiRequest", {
+          url: "dish",
+          data: dataDish,
+          successMessage: "Uspešno ste dodali jelo",
+         })
+         .then((res) => {
+          this.id = res;
+           this.$q.loading.show({
+            spinner: QSpinnerBall,
+            spinnerColor: "brown",
+            spinnerSize: 140,
+           backgroundColor: "grey",
+            message: "Molimo Vas pričekajte...",
+            messageColor: "black",
+           });
+          this.$refs.uploaderRef.upload();
+          this.timer = setTimeout(() => {
+             this.$q.loading.hide();
+            this.timer = void 0;
+            this.confirm = true;
+          }, 3000);
+        });
+       this.getData();
+    },
     addsastojak() {
       this.sastojci.push(this.imeSastojka);
-      
-      
+      this.kolicine.push(this.kolicina);
+      this.merneJedinice.push(this.mernaJedinica);
+      this.nizSastojaka.push(
+        this.imeSastojka + " " + this.kolicina + " " + this.mernaJedinica
+      );
     },
     removeElement: function (index) {
+      this.nizSastojaka.splice(index, 1);
       this.sastojci.splice(index, 1);
+      this.kolicine.splice(index, 1);
+      this.merneJedinice.splice(index, 1);
     },
     handleClickPlus() {
       this.visibleAddDishForm = true;

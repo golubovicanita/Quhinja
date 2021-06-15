@@ -16,7 +16,7 @@ namespace Quhinja.Services.Mappings.InputMappings
             CreateMap<DishBasicInputModel, Dish>();
             CreateMap<UsersRatingForDishInputModel, UsersRatingForDish>();
             CreateMap<DishSelectedRecipeInput, Dish>();
-
+            CreateMap<UsersCommentForDishInputModel, UserCommentsForDish>();
         }
     }
 }

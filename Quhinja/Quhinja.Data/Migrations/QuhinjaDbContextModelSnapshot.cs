@@ -157,6 +157,9 @@ namespace Quhinja.Data.Migrations
                     b.Property<string>("Picture")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Rate")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<float?>("averageRating")
                         .HasColumnType("real");
 
@@ -261,6 +264,34 @@ namespace Quhinja.Data.Migrations
                     b.ToTable("MissedLunches");
                 });
 
+            modelBuilder.Entity("Quhinja.Data.Entiities.Quhinja.Data.Entiities.UserCommentsForDish", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("DateOfComment")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DishId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("com")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DishId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserCommentsForDish");
+                });
+
             modelBuilder.Entity("Quhinja.Data.Entiities.Quhinja.Data.Entiities.UsersRatingForDish", b =>
                 {
                     b.Property<int>("Id")
@@ -359,7 +390,7 @@ namespace Quhinja.Data.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "a1ca4ec0-ef90-43af-84c3-695de80280b9",
+                            ConcurrencyStamp = "9e181ba6-daeb-4604-ac76-dbd89446d645",
                             Name = "admin",
                             NormalizedName = "ADMIN",
                             RoleDescription = "admin"
@@ -367,7 +398,7 @@ namespace Quhinja.Data.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "fd9e1839-7e4f-4102-adf9-1fb6ef11cc61",
+                            ConcurrencyStamp = "cfe4f882-5198-446c-aa89-e8e7476fbac7",
                             Name = "user",
                             NormalizedName = "USER",
                             RoleDescription = "user"
@@ -478,9 +509,9 @@ namespace Quhinja.Data.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "370fe51a-a803-4c7c-b44c-3eb1ba061075",
-                            DateOfBirth = new DateTime(2021, 6, 8, 10, 54, 56, 356, DateTimeKind.Local).AddTicks(1380),
-                            DateOfEmployment = new DateTime(2021, 6, 8, 10, 54, 56, 368, DateTimeKind.Local).AddTicks(7107),
+                            ConcurrencyStamp = "52226afd-d415-4abb-951b-7ef35e3d4e2b",
+                            DateOfBirth = new DateTime(2021, 6, 15, 15, 8, 21, 910, DateTimeKind.Local).AddTicks(1085),
+                            DateOfEmployment = new DateTime(2021, 6, 15, 15, 8, 21, 925, DateTimeKind.Local).AddTicks(6959),
                             Email = "srdjan.arsic@quadrixsoft.com",
                             EmailConfirmed = false,
                             Gender = 1,
@@ -589,6 +620,21 @@ namespace Quhinja.Data.Migrations
 
                     b.HasOne("Quhinja.Data.Entities.User", "User")
                         .WithMany("MissedDates")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Quhinja.Data.Entiities.Quhinja.Data.Entiities.UserCommentsForDish", b =>
+                {
+                    b.HasOne("Quhinja.Data.Entiities.Dish", "Dish")
+                        .WithMany("UsersComments")
+                        .HasForeignKey("DishId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Quhinja.Data.Entities.User", "User")
+                        .WithMany("CommentsInDish")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();

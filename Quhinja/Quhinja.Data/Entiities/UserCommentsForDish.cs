@@ -5,7 +5,7 @@
 
     namespace Quhinja.Data.Entiities
     {
-        class UserCommentsForDish
+       public class UserCommentsForDish
         {
             public int Id { get; set; }
 
