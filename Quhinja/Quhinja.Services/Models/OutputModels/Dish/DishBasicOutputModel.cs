@@ -13,7 +13,7 @@ namespace Quhinja.Services.Models.OutputModels.Dish
 
         public string Picture { get; set; }
 
-        public byte [] Image { get; set; }
+        public string Image { get; set; }
 
         public string Description { get; set; }
 
@@ -21,7 +21,7 @@ namespace Quhinja.Services.Models.OutputModels.Dish
 
         public int selectedRecipeId { get; set; }
 
-
+        public string Rate { get; set; }
 
         public float averageRating { get; set; }
 

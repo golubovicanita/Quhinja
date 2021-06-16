@@ -10,8 +10,8 @@ using Quhinja.Data;
 namespace Quhinja.Data.Migrations
 {
     [DbContext(typeof(QuhinjaDbContext))]
-    [Migration("20210615130824_anita1")]
-    partial class anita1
+    [Migration("20210616092955_proba")]
+    partial class proba
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -148,8 +148,8 @@ namespace Quhinja.Data.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<byte[]>("Image")
-                        .HasColumnType("varbinary(max)");
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -392,7 +392,7 @@ namespace Quhinja.Data.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "9e181ba6-daeb-4604-ac76-dbd89446d645",
+                            ConcurrencyStamp = "09c129f8-e270-415e-a0d2-f6b3c4d7e73b",
                             Name = "admin",
                             NormalizedName = "ADMIN",
                             RoleDescription = "admin"
@@ -400,7 +400,7 @@ namespace Quhinja.Data.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "cfe4f882-5198-446c-aa89-e8e7476fbac7",
+                            ConcurrencyStamp = "6c1e7a9c-e9e9-4b7d-8e81-edbb6de192b7",
                             Name = "user",
                             NormalizedName = "USER",
                             RoleDescription = "user"
@@ -511,9 +511,9 @@ namespace Quhinja.Data.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "52226afd-d415-4abb-951b-7ef35e3d4e2b",
-                            DateOfBirth = new DateTime(2021, 6, 15, 15, 8, 21, 910, DateTimeKind.Local).AddTicks(1085),
-                            DateOfEmployment = new DateTime(2021, 6, 15, 15, 8, 21, 925, DateTimeKind.Local).AddTicks(6959),
+                            ConcurrencyStamp = "fb682c4a-afe2-42e4-a276-cf2377618d12",
+                            DateOfBirth = new DateTime(2021, 6, 16, 11, 29, 53, 518, DateTimeKind.Local).AddTicks(1937),
+                            DateOfEmployment = new DateTime(2021, 6, 16, 11, 29, 53, 530, DateTimeKind.Local).AddTicks(8700),
                             Email = "srdjan.arsic@quadrixsoft.com",
                             EmailConfirmed = false,
                             Gender = 1,

@@ -1,7 +1,8 @@
 <template>
   <q-page v-if="this.dish" class="bg-grey-4">
     <div class="mainDiv">
-      <div class="q-mt-xl leftDiv"
+      <div
+        class="q-mt-xl leftDiv"
         style="
           border-style: none;
           display: flex;
@@ -33,7 +34,9 @@
               :src="this.dish.image"
             />
 
-            <q-card-section style="border-style: none; background-color: #baa671">
+            <q-card-section
+              style="border-style: none; background-color: #baa671"
+            >
               <div class="row no-wrap items-center">
                 <div class="col text-bold text-h6 ellipsis">
                   {{ this.dish.name }}
@@ -67,6 +70,7 @@
         <div v-if="!this.admin">
           <div class="q-mt-xl"></div>
           <q-form @submit="onSubmit" class="q-gutter-md">
+            <template v-if="(this.dish.rate != 'Ne')" class="hidden1">
             <div class="text-red-1 flex column q-mt-md">
               <q-rating
                 class="q-mb-md"
@@ -79,10 +83,19 @@
                 icon-half="star_half"
                 no-dimming
               />
-              <q-btn label="Oceni" type="submit" color="red-1" />
-              <div v-if="usersRatingFromBase != 0"></div>
-              <div v-else>Niste ocenili ovo jelo</div>
+              <div>
+                <q-btn
+                  label="Oceni"
+                  enable="false"
+                  type="submit"
+                  color="red-1"
+                />
+              </div>
+                <div v-if="usersRatingFromBase != 0"></div>
+                <div v-else>Niste ocenili ovo jelo</div>
+             
             </div>
+             </template>
           </q-form>
         </div>
       </div>
@@ -94,10 +107,16 @@
           style="display: flex; align-items: center; justify-content: center"
         >
           <q-list>
-            <div class="flex row" v-for="recipe in this.dish.recipes" :key="recipe.id">
+            <div
+              class="flex row"
+              v-for="recipe in this.dish.recipes"
+              :key="recipe.id"
+            >
               <q-item
                 :style="
-                  recipe.id == dish.selectedRecipeId ? ' transform: scale(1.1);' : ''
+                  recipe.id == dish.selectedRecipeId
+                    ? ' transform: scale(1.1);'
+                    : ''
                 "
                 clickable
                 @click="handleShowRecipe(recipe)"
@@ -119,7 +138,9 @@
                   ></q-img>
                 </q-item-section>
                 <q-item-section>
-                  <q-item-label class="text-grey-4">{{ recipe.name }}</q-item-label>
+                  <q-item-label class="text-grey-4">{{
+                    recipe.name
+                  }}</q-item-label>
                 </q-item-section>
               </q-item>
               <div v-if="admin" class="q-ml-md" @click="checkBox(recipe.id)">
@@ -196,7 +217,8 @@
             <div style="color: #6f6e57" class="middleDiv q-mt-sm">
               <p>Vreme pripreme: {{ recipeToShow.preparationTime }}</p>
               <p>
-                Link: <a :href="recipeToShow.preview">{{ recipeToShow.preview }}</a>
+                Link:
+                <a :href="recipeToShow.preview">{{ recipeToShow.preview }}</a>
               </p>
             </div>
             <div class="q-mt-sm">
@@ -296,10 +318,12 @@ export default {
         });
     },
     getUsersData() {
-      this.$store.dispatch("apiRequest/getApiRequest", { url: "user/0" }).then((res) => {
-        this.userData = res;
-        this.check();
-      });
+      this.$store
+        .dispatch("apiRequest/getApiRequest", { url: "user/0" })
+        .then((res) => {
+          this.userData = res;
+          this.check();
+        });
     },
     checkBox(recipeId) {
       console.log(recipeId);
@@ -363,6 +387,7 @@ export default {
   border-width: 4px;
   border-color: grey;
 }
+
 input[type=checkbox] {
   transform: scale(1.5);
 }
@@ -372,13 +397,13 @@ input[type=checkbox] {
   height: 15px;
   margin-right: 8px;
   cursor: pointer;
-  font-size:10px;
+  font-size: 10px;
   visibility: hidden;
 }
 
 input[type=checkbox]:after {
-  content: " ";
-  background-color:white;
+  content: ' ';
+  background-color: white;
   display: inline-block;
   margin-left: 10px;
   padding-bottom: 5px;
@@ -392,11 +417,15 @@ input[type=checkbox]:after {
 }
 
 input[type=checkbox]:checked:after {
-  content: "\2714";
+  content: '\2714';
   padding: -5px;
   font-weight: bold;
 }
+
 cards {
   font-family: 'Open Sans';
+}
+.hidden1 {
+  display: none;
 }
 </style>

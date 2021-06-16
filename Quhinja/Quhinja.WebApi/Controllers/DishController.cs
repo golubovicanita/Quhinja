@@ -119,7 +119,7 @@ namespace Quhinja.WebApi.Controllers
             return Ok();
         }
 
-        [Produces("application/json-patch+json")]
+       /* [Produces("application/json-patch+json")]
         [AllowAnonymous]
         [HttpPost]
         [Route("{dishId}/uploadDishPicture")]
@@ -128,17 +128,17 @@ namespace Quhinja.WebApi.Controllers
 
             var files= this.Request.Form.Files;
 
-            //   var path = await blobService.UploadPictureAsync(files.First(), BlobService.DishPicturesContainer);
+            var path = await blobService.UploadPictureAsync(files.First(), BlobService.DishPicturesContainer);
             var bytes = await blobService.GetBytesFromPicture(files.First());
             await dishService.AddImageBytesAsync(dishId, bytes);
 
 
-            //    await dishService.AddImageToDishAsync( dishId, path);
+             await dishService.AddImageToDishAsync( dishId, path);
             
 
             return Ok();
         }
-
+       */
         [AllowAnonymous]
         [HttpGet]
         [Route("dishTypes")]

@@ -36,8 +36,7 @@
         class="my-card"
       >
         <div class="col-4">
-          <q-img :src="dish.image" style="height: 200px; width: 100%" />
-
+          <q-img :src="dish.picture" class="picc" />
           <div class="q-pa-md">
             <div class="col text-h6 name ellipsis">
               {{ dish.name }}
@@ -136,21 +135,7 @@
                   <q-input filled v-model="name" label="Npr. Pizza" />
                 </div>
                 <div class="col-6">
-                  <q-file
-                    filled
-                    bottom-slots
-                    v-model="image"
-                    label="Upload image"
-                    counter
-                  >
-                    <template v-slot:append>
-                      <q-icon
-                        name="close"
-                        @click.stop="model = null"
-                        class="cursor-pointer"
-                      />
-                    </template>
-                  </q-file>
+                  <q-input filled v-model="image" label="Upload image" />
                 </div>
               </div>
               <div
@@ -173,27 +158,15 @@
                   <div class="row justify-between">
                     <div class="col-4 q-pr-sm">
                       <q-item-label>h</q-item-label>
-                      <q-input
-                        v-model.number="sati"
-                        type="number"
-                        filled
-                      />
+                      <q-input v-model.number="sati" type="number" filled />
                     </div>
                     <div class="col-4 q-pr-sm">
                       <q-item-label>min</q-item-label>
-                      <q-input
-                        v-model.number="min"
-                        type="number"
-                        filled
-                      />
+                      <q-input v-model.number="min" type="number" filled />
                     </div>
                     <div class="col-4 q-pr-sm">
                       <q-item-label>sek</q-item-label>
-                      <q-input
-                        v-model.number="sek"
-                        type="number"
-                        filled
-                      />
+                      <q-input v-model.number="sek" type="number" filled />
                     </div>
                   </div>
                 </div>
@@ -214,9 +187,6 @@
                     v-model="ocena"
                     val="Da"
                     label="Da"
-                    
-
-
                   />
                   <q-radio
                     color="brown-7"
@@ -292,7 +262,6 @@
             <q-card-actions align="right" class="bg-white text-teal">
               <q-btn
                 class="backBtn"
-              
                 flat
                 label="Dodaj jelo i recept"
                 @click="addDish"
@@ -313,6 +282,9 @@ export default {
   mixins: [formRulesMixin],
   data() {
     return {
+      idDish: 0,
+      idRecept: 0,
+      image: "",
       dishType: "Ljuto",
       ocena: "Da",
       model: null,
@@ -323,7 +295,7 @@ export default {
       merneJedinice: [],
       kolicine: [],
       kolicina: "",
-      ocenjivanje: true, 
+      ocenjivanje: true,
       mernaJedinica: "",
       nizSastojaka: [],
       sortingOptions: [],
@@ -337,15 +309,13 @@ export default {
       userData: {},
       sortBool: false,
       imeSastojka: "",
-        name: "",
-        image: "",
-        picture: "",
-        opis: "",
-        link: "",
-        min: 0,
-        sati: 0,
-        sek: 0,
-      
+      name: "",
+      opis: "",
+      link: "",
+      min: 0,
+      sati: 0,
+      sek: 0,
+      vreme: " ",
     };
   },
   computed: {
@@ -378,12 +348,6 @@ export default {
     },
   },
   methods: {
-    factoryFn(files) {
-      return {
-        url: "http://localhost:8080/upload",
-        method: "POST",
-      };
-    },
     handleClick(id) {
       this.$router.push("dish/" + id);
     },
@@ -391,39 +355,74 @@ export default {
       const dataDish = {
         name: this.name,
         description: this.opis,
-        
+        picture: this.image,
         rate: this.ocena,
         dishType: this.dishType,
-        
-        
       };
       console.log(dataDish);
 
-       this.$store
-         .dispatch("apiRequest/postApiRequest", {
+      this.$store
+        .dispatch("apiRequest/postApiRequest", {
           url: "dish",
           data: dataDish,
           successMessage: "Uspešno ste dodali jelo",
-         })
-         .then((res) => {
-          this.id = res;
-           this.$q.loading.show({
-            spinner: QSpinnerBall,
-            spinnerColor: "brown",
-            spinnerSize: 140,
-           backgroundColor: "grey",
-            message: "Molimo Vas pričekajte...",
-            messageColor: "black",
-           });
-          this.$refs.uploaderRef.upload();
-          this.timer = setTimeout(() => {
-             this.$q.loading.hide();
-            this.timer = void 0;
-            this.confirm = true;
-          }, 3000);
+        })
+        .then((res) => {
+          this.idDish = res;
+          this.addRecept();
         });
-       this.getData();
+
+      this.getData();
     },
+    addRecept() {
+      const dataRecept = {
+        name: this.name,
+        dishId: this.idDish,
+        WayOfPreparing: "",
+        preview: this.link,
+        preparationTime: this.vratiVreme(),
+      };
+      console.log(dataRecept);
+      this.$store
+        .dispatch("apiRequest/postApiRequest", {
+          url: "recipe",
+          data: dataRecept,
+          successMessage: "Uspešno ste dodali recept",
+        })
+        .then((res) => {
+          this.idRecept = res;
+          this.addIngridents();
+        });
+      console.log(this.idRecept);
+      console.log(dataRecept);
+    },
+     addIngridents() {
+      var i;
+      for (i = 0; i < this.sastojci.length; i++) {
+        const data = {
+          recipeId: this.recipeId,
+          quantity: parseInt(this.kolicine[i]),
+          ingridient: {
+            name: this.sastojci[i],
+          },
+          unit: this.merneJedinice[i],
+        };
+        console.log(this.sastojci[i]),
+        console.log(this.merneJedinice[i]),
+        console.log(this.kolicine[i]),
+        
+        
+        this.$store.dispatch("apiRequest/postApiRequest", {
+          url: "ingridient/addIngridient",
+          data: data,
+           successMessage: "Uspešno ste dodali sastojke"
+        });
+      }
+    },
+    vratiVreme() {
+      this.vreme = this.sati + "h " + this.min + "min " + this.sek + "s";
+    },
+
     addsastojak() {
       this.sastojci.push(this.imeSastojka);
       this.kolicine.push(this.kolicina);
@@ -534,10 +533,7 @@ export default {
   flex-direction: column;
   justify-items: stretch;
 }
-.picture {
-  width: 100%;
-  height: 280px;
-}
+
 .forma {
   justify-content: center;
   display: flex;
@@ -552,5 +548,9 @@ export default {
 .backBtn {
   background-color: #5c5840;
   color: white;
+}
+.picc {
+  width: 100%;
+  height: 240px;
 }
 </style>

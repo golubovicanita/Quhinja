@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Quhinja.Data.Migrations
 {
-    public partial class anita1 : Migration
+    public partial class proba : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -84,7 +84,7 @@ namespace Quhinja.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     Picture = table.Column<string>(nullable: true),
-                    Image = table.Column<byte[]>(nullable: true),
+                    Image = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     selectedRecipeId = table.Column<int>(nullable: false),
                     selectedRecipeId1 = table.Column<int>(nullable: true),
@@ -353,17 +353,17 @@ namespace Quhinja.Data.Migrations
             migrationBuilder.InsertData(
                 table: "Roles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName", "RoleDescription" },
-                values: new object[] { 1, "9e181ba6-daeb-4604-ac76-dbd89446d645", "admin", "ADMIN", "admin" });
+                values: new object[] { 1, "09c129f8-e270-415e-a0d2-f6b3c4d7e73b", "admin", "ADMIN", "admin" });
 
             migrationBuilder.InsertData(
                 table: "Roles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName", "RoleDescription" },
-                values: new object[] { 2, "cfe4f882-5198-446c-aa89-e8e7476fbac7", "user", "USER", "user" });
+                values: new object[] { 2, "6c1e7a9c-e9e9-4b7d-8e81-edbb6de192b7", "user", "USER", "user" });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "DateOfBirth", "DateOfEmployment", "Email", "EmailConfirmed", "FavouriteDishId", "Gender", "Image", "LockoutEnabled", "LockoutEnd", "Name", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "Position", "ProfilePictureUrl", "SecurityStamp", "Surname", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 1, 0, "52226afd-d415-4abb-951b-7ef35e3d4e2b", new DateTime(2021, 6, 15, 15, 8, 21, 910, DateTimeKind.Local).AddTicks(1085), new DateTime(2021, 6, 15, 15, 8, 21, 925, DateTimeKind.Local).AddTicks(6959), "srdjan.arsic@quadrixsoft.com", false, null, 1, null, true, null, "Srdjan", "SRDJAN.ARSIC@QUADRIXSOFT.COM", "ADM", "AQAAAAEAACcQAAAAELVcpiFzbc+pNTWWEBIXRKHvCaoWR65ihDzBGmGTwqAWU5kcy7KVDHLS+YSPTycg7w==", null, false, null, null, "5TBB7CACI3F2JOD25JGXSNQASZ2NWHRK", "Arsic", false, "adm" });
+                values: new object[] { 1, 0, "fb682c4a-afe2-42e4-a276-cf2377618d12", new DateTime(2021, 6, 16, 11, 29, 53, 518, DateTimeKind.Local).AddTicks(1937), new DateTime(2021, 6, 16, 11, 29, 53, 530, DateTimeKind.Local).AddTicks(8700), "srdjan.arsic@quadrixsoft.com", false, null, 1, null, true, null, "Srdjan", "SRDJAN.ARSIC@QUADRIXSOFT.COM", "ADM", "AQAAAAEAACcQAAAAELVcpiFzbc+pNTWWEBIXRKHvCaoWR65ihDzBGmGTwqAWU5kcy7KVDHLS+YSPTycg7w==", null, false, null, null, "5TBB7CACI3F2JOD25JGXSNQASZ2NWHRK", "Arsic", false, "adm" });
 
             migrationBuilder.InsertData(
                 table: "UserRoles",

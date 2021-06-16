@@ -13,7 +13,7 @@ namespace Quhinja.Services.Interfaces
   public interface IDishService
     {
         Task<DishWithRecipesOutputModel> GetDishByIdAsync(int id);
-         Task AddImageBytesAsync(int dishId, byte[] image);
+         //Task AddImageBytesAsync(int dishId, byte[] image);
 
         Task<ICollection<string>> GetDishTypesAsync();
         Task<ICollection<DishBasicOutputModel>> GetDishesAsync();
@@ -28,6 +28,6 @@ namespace Quhinja.Services.Interfaces
 
         Task<ICollection<DishBasicOutputModel>> GetSortedDishesAsync();
         Task RemoveDishAsync(int dishId);
-        Task AddImageToDishAsync(int dishId, string path);
+        //Task AddImageToDishAsync(int dishId, string path);
     }
 }
