@@ -20,5 +20,7 @@ namespace Quhinja.Services.Interfaces
 
         Task RemoveRecipeAsync(int recipeId);
         Task AddImageToRecipeAsync(int recipeId, string path);
+        //dodato
+        Task UpdateRecipeAsync(RecipeWithDishUpdateInputModel model, int recipeId);
     }
 }

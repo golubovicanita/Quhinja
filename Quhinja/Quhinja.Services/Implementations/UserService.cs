@@ -50,7 +50,7 @@ namespace Quhinja.Services.Implementations
         public async Task<string> GetCommentForUser(int id, int dishId)
         {
             {
-                var com = await data.UsersCommentForDishes.Where(x => x.DishId == dishId && x.UserId == id).Select(x => x.com).FirstOrDefaultAsync();
+                var com = await data.UserCommentsForDish.Where(x => x.DishId == dishId && x.UserId == id).Select(x => x.com).FirstOrDefaultAsync();
                 return com;
             }
         }

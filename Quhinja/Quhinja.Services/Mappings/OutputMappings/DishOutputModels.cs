@@ -10,11 +10,12 @@ namespace Quhinja.Services.Mappings.OutputMappings
     {
         public DishOutputModels()
         {
-            CreateMap<Dish, DishWithRecipesOutputModel>();
+            CreateMap<Dish, Models.OutputModels.Dish.UsersCommentsForDishOutputModel>();
 
             CreateMap<Dish,DishBasicOutputModel>();
 
             CreateMap<UsersRatingForDish, UsersRatingsForDishOutputModel>();
+            CreateMap<UserCommentsForDish, Models.OutputModels.Recipe.UsersCommentsForDishOutputModel>();
         }
     }
 }

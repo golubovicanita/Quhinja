@@ -12,22 +12,28 @@ namespace Quhinja.Services.Interfaces
 {
   public interface IDishService
     {
-        Task<DishWithRecipesOutputModel> GetDishByIdAsync(int id);
+        Task<UsersCommentsForDishOutputModel> GetDishByIdAsync(int id);
          //Task AddImageBytesAsync(int dishId, byte[] image);
 
         Task<ICollection<string>> GetDishTypesAsync();
         Task<ICollection<DishBasicOutputModel>> GetDishesAsync();
 
         Task<int> selectRecipe(DishSelectedRecipeInput dish);
-        Task<ICollection<DishWithRecipesOutputModel>> GetDishesWithRecipesAsync();
+        Task<ICollection<UsersCommentsForDishOutputModel>> GetDishesWithRecipesAsync();
 
         Task<int> AddDishAsync(DishBasicInputModel model);
-        Task<int> AddCommentAsync(UsersCommentForDishInputModel model);
-        Task<ICollection<CommentBasicOutputModel>> GetCommentsForDish(int dishId);
+        Task AddCommentAsync(UsersCommentForDishInputModel model);
+
+        Task<ICollection<string>> GetCommentsForDishAsync(int dishId);
+        Task<ICollection<string>> GetUsersCommentForDishAsync(int dishId);
+
         Task<float?> RateDishAsync(UsersRatingForDishInputModel model);
 
         Task<ICollection<DishBasicOutputModel>> GetSortedDishesAsync();
         Task RemoveDishAsync(int dishId);
         //Task AddImageToDishAsync(int dishId, string path);
+
+        //dodato
+        Task UpdateDishAsync(DishUpdateInputModel model, int dishId);
     }
 }

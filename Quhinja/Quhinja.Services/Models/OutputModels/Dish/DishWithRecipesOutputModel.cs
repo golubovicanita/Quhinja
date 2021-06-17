@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Quhinja.Services.Models.OutputModels.Dish
 {
-   public class DishWithRecipesOutputModel : DishBasicOutputModel
+   public class UsersCommentsForDishOutputModel : DishBasicOutputModel
     {
         public IEnumerable<RecipeBasicOutputModel> Recipes { get; set; }
 

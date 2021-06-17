@@ -27,6 +27,7 @@ namespace Quhinja.Data.Entiities
 
         public string DishType { get; set; }
         public  ICollection<UserCommentsForDish> UsersComments { get; set; }
+        public int? numOfComments { get; set;  }
 
     }
 }

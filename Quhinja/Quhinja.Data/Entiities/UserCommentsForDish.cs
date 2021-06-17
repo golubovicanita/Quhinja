@@ -17,7 +17,7 @@
 
             public Dish Dish { get; set; }
             public string com { get; set; }
-            public DateTime DateOfComment { get; set; }
+            
         }
     }
 

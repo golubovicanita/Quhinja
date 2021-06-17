@@ -21,7 +21,8 @@ namespace Quhinja.WebApi.Controllers
         private readonly IBlobService blobService;
 
 
-        public DishController(IDishService dishService,IBlobService blobService)
+
+        public DishController(IDishService dishService, IBlobService blobService)
 
         {
             this.dishService = dishService;
@@ -31,7 +32,7 @@ namespace Quhinja.WebApi.Controllers
         [AllowAnonymous]
         [HttpGet]
         [Route("{id}")]
-        public async Task<ActionResult<DishWithRecipesOutputModel>> GetDishByIdAsync(int id)
+        public async Task<ActionResult<UsersCommentsForDishOutputModel>> GetDishByIdAsync(int id)
         {
             var dishOutputModel = await dishService.GetDishByIdAsync(id);
             return Ok(dishOutputModel);
@@ -47,7 +48,7 @@ namespace Quhinja.WebApi.Controllers
         [AllowAnonymous]
         [HttpGet]
         [Route("withRecipes")]
-        public async Task<ActionResult<ICollection<DishWithRecipesOutputModel>>> GetDishesWithRecipesAsync()
+        public async Task<ActionResult<ICollection<UsersCommentsForDishOutputModel>>> GetDishesWithRecipesAsync()
         {
             var dishOutputModel = await dishService.GetDishesWithRecipesAsync();
             return Ok(dishOutputModel);
@@ -69,16 +70,39 @@ namespace Quhinja.WebApi.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("addComment")]
-        public async Task<ActionResult<int>> AddCommentAsync([FromBody] UsersCommentForDishInputModel comInputModel)
+        public async Task<ActionResult> AddCommentAsync([FromBody] UsersCommentForDishInputModel comInputModel)
         {
             if (ModelState.IsValid)
             {
-                var id = await dishService.AddCommentAsync(comInputModel);
-                return Ok(id);
+                await dishService.AddCommentAsync(comInputModel);
+                return Ok();
             }
             else
                 return BadRequest(ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).ToList());
         }
+
+        //dodato
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("getCommentsForDish/{dishId}")]
+
+        public async Task<ActionResult<ICollection<string>>> GetComments([FromRoute] int dishId)
+        {
+              var comments = await dishService.GetCommentsForDishAsync(dishId);
+              return Ok(comments);
+        }
+
+        //dodato
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("getUsersOfCommentsForDish/{dishId}")]
+
+        public async Task<ActionResult<ICollection<string>>> GetUserOfComm([FromRoute] int dishId)
+        {
+            var comments = await dishService.GetUsersCommentForDishAsync(dishId);
+            return Ok(comments);
+        }
+
         [Authorize(Roles = "admin")]
         [HttpPost]
         [Route("changeSelectedRecipe")]
@@ -157,13 +181,16 @@ namespace Quhinja.WebApi.Controllers
             return Ok(dishOutputModel);
         }
 
+       
+       
+        //dodato
         [AllowAnonymous]
-        [HttpGet]
-        [Route("getCommentsForDish/{dishId}")]
-        public async Task<ActionResult<ICollection<CommentBasicOutputModel>>> GetCommentsForDish([FromRoute] int dishId)
+        [HttpPut]
+        [Route("update-dish/{dishId}")]
+        public async Task<ActionResult> UpdateDishAsync([FromBody] DishUpdateInputModel dishInputModel, [FromRoute] int dishId)
         {
-            return Ok( dishService.GetCommentsForDish(dishId));
-           
+            await dishService.UpdateDishAsync(dishInputModel, dishId);
+            return Ok();
         }
     }
 }

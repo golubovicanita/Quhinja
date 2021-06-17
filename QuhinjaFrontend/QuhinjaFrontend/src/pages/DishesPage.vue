@@ -400,7 +400,7 @@ export default {
       var i;
       for (i = 0; i < this.sastojci.length; i++) {
         const data = {
-          recipeId: this.recipeId,
+          recipeId: this.idRecept,
           quantity: parseInt(this.kolicine[i]),
           ingridient: {
             name: this.sastojci[i],

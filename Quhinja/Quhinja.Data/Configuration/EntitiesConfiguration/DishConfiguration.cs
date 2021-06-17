@@ -34,17 +34,17 @@ namespace Quhinja.Data.Configuration.EntitiesConfiguration
             builder.HasMany(dish => dish.Recipes)
                 .WithOne(recipe => recipe.Dish)
                 .HasForeignKey(recipe => recipe.DishId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(dish => dish.UsersRatings)
                .WithOne(rat => rat.Dish)
                .HasForeignKey(rat => rat.DishId)
-               .OnDelete(DeleteBehavior.NoAction);
+               .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(dish => dish.UsersComments)
                .WithOne(rat => rat.Dish)
                .HasForeignKey(rat => rat.DishId)
-               .OnDelete(DeleteBehavior.NoAction);
+               .OnDelete(DeleteBehavior.Cascade);
 
         }
 

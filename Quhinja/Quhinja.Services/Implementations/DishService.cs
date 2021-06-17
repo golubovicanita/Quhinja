@@ -40,24 +40,38 @@ namespace Quhinja.Services.Implementations
             data.SaveChanges();
             return dish.Id;
         }
-        public async Task<int> AddCommentAsync(UsersCommentForDishInputModel model)
+        public async Task AddCommentAsync(UsersCommentForDishInputModel model)
         {
             if (model == null)
             {
                 throw new ArgumentNullException(nameof(model));
             }
-            var comment = mapper.Map<UserCommentsForDish>(model);
-            await data.UsersCommentForDishes.AddAsync(comment);
-            data.SaveChanges();
-            return comment.Id;
+            var com = mapper.Map<UserCommentsForDish>(model);
+
+            var CommFromBase = data.UserCommentsForDish.Where(x => x.DishId == model.DishId && x.UserId == model.UserId).FirstOrDefault();
+            if (CommFromBase == null)
+            {
+                await data.UserCommentsForDish.AddAsync(com);
+                await data.SaveChangesAsync();
+            }
+            else
+            {
+                CommFromBase.com = model.com;
+                data.Update(CommFromBase);
+
+            }
+            
+            await data.SaveChangesAsync();
+            
+
         }
-       
-        public async  Task<DishWithRecipesOutputModel> GetDishByIdAsync(int id)
+
+        public async  Task<UsersCommentsForDishOutputModel> GetDishByIdAsync(int id)
         {
             var dish = await data.Dishes.Include(dishh => dishh.Recipes).ThenInclude(r => r.Ingridients).ThenInclude(ing=>ing.Ingridient).SingleOrDefaultAsync(d => d.Id == id);
             if (dish != null)
             {
-                return mapper.Map<DishWithRecipesOutputModel>(dish);
+                return mapper.Map<UsersCommentsForDishOutputModel>(dish);
             }
             throw new Exception("Not found in db");
         }
@@ -70,11 +84,37 @@ namespace Quhinja.Services.Implementations
                           .Select(r => mapper.Map<DishBasicOutputModel>(r))
                           .ToListAsync();
         }
+        //dodato
+        public  async Task<ICollection<string>> GetCommentsForDishAsync(int dishId)
+        {
+            var comments= await data.UserCommentsForDish.Where(x=>x.DishId==dishId).Select(x => x.com).ToListAsync();
+            
 
-        public async Task<ICollection<DishWithRecipesOutputModel>> GetDishesWithRecipesAsync()
+            var arrayOfComm = await data.UserCommentsForDish.Where(x => x.DishId == dishId).ToListAsync();
+            var dish = await data.Dishes.FindAsync(dishId);
+            int lenght = arrayOfComm.Count();
+            dish.numOfComments = lenght;
+            await data.SaveChangesAsync();
+
+            return comments;
+            // return await data.Dishes.Select(x => x.DishType).Distinct().ToListAsync();
+
+
+        }
+        //dodato
+        public async Task<ICollection<string>> GetUsersCommentForDishAsync(int dishId)
+        {
+            var comments = await data.UserCommentsForDish.Where(x => x.DishId == dishId).Select(x => x.User.UserName).ToListAsync();
+            return comments;
+            // return await data.Dishes.Select(x => x.DishType).Distinct().ToListAsync();
+
+
+        }
+
+        public async Task<ICollection<UsersCommentsForDishOutputModel>> GetDishesWithRecipesAsync()
         {
             return await data.Dishes.Include(ing => ing.Recipes)
-                          .Select(r => mapper.Map<DishWithRecipesOutputModel>(r))
+                          .Select(r => mapper.Map<UsersCommentsForDishOutputModel>(r))
                           .ToListAsync();
         }
 
@@ -83,16 +123,26 @@ namespace Quhinja.Services.Implementations
         public async Task RemoveDishAsync(int dishId)
         {
             var dishInDb = await data.Dishes
-                        .Include(ing => ing.Recipes)
+                        .Include(x=>x.UsersComments).Include(x=>x.UsersRatings).Include(ing => ing.Recipes).ThenInclude(x=>x.Ingridients)
                         .SingleOrDefaultAsync(ing => ing.Id == dishId);
-
+            var recept = await data.Recipes.Where(x => x.DishId == dishId).Include(x=>x.Ingridients).ToListAsync();
+           
+            foreach(var r in recept)
+            {
+                foreach(var i in r.Ingridients)
+                {
+                    this.data.IngridientInRecipes.Remove(i);
+                }
+                this.data.Recipes.Remove(r);
+            }
             if (dishInDb != null)//Brisanje jela iz svih recepata
             {
                 data.Dishes.Remove(dishInDb);
                 data.SaveChanges();
             }
-        
-    }
+            
+
+        }
       /*  public async Task AddImageBytesAsync ( int dishId, byte [] image)
         {
             var dish = await data.Dishes.FindAsync(dishId);
@@ -167,12 +217,23 @@ namespace Quhinja.Services.Implementations
 
             return recipe.Id;
         }
-        public async Task<ICollection<CommentBasicOutputModel>> GetCommentsForDish(int dishId)
-        {
 
-            return await data.CommentsForDish.Where(x=>x.DishId==dishId)
-                          .Select(r => mapper.Map<CommentBasicOutputModel>(r))
-                          .ToListAsync();
+      
+
+        //dodaato
+        public async Task UpdateDishAsync(DishUpdateInputModel model, int dishId)
+        {
+            var dishInDb = await data.Dishes.FindAsync(dishId);
+            dishInDb.Name = model.Name;
+            dishInDb.Picture = model.Picture;
+            dishInDb.Description = model.Description;
+            dishInDb.Rate = model.Rate;
+            dishInDb.DishType = model.DishType;
+           
+
+            data.Update(dishInDb);
+            await data.SaveChangesAsync();
+
         }
     }
 }

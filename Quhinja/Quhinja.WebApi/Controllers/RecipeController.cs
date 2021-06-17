@@ -89,6 +89,16 @@ namespace Quhinja.WebApi.Controllers
 
             return Ok();
         }
-    
+
+        //dodato
+        [AllowAnonymous]
+        [HttpPut]
+        [Route("update-recipe/{recipeId}")]
+        public async Task<ActionResult> UpdateRecipeAsync([FromBody] RecipeWithDishUpdateInputModel recipeInputModel, [FromRoute] int recipeId)
+        {
+            await recipeService.UpdateRecipeAsync(recipeInputModel, recipeId);
+            return Ok();
+        }
+
     }
 }

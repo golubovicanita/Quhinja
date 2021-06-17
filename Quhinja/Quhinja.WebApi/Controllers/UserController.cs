@@ -52,7 +52,7 @@ namespace Quhinja.WebApi.Controllers
             return Ok(users);
         }
 
-        [Authorize(Roles = "user")]
+        [AllowAnonymous]
         [HttpGet]
         [Route("getRatingForUser/{dishId}")]
         public async Task<ActionResult<int>> GetRatingForUser([FromRoute] int dishId)
@@ -68,7 +68,7 @@ namespace Quhinja.WebApi.Controllers
     }
 
         //dodato
-        [Authorize(Roles = "user")]
+        [AllowAnonymous]
         [HttpGet]
         [Route("getCommentForUser/{dishId}")]
         public async Task<ActionResult<string>> GetCommentForUser([FromRoute] int dishId)

@@ -80,15 +80,34 @@ namespace Quhinja.Services.Implementations
         public async Task RemoveRecipeAsync(int recipeId)
         {
             var recipeInDb = await data.Recipes
-                                    .Include(r => r.Dish)
+                                    .Include(r=>r.Ingridients)
                                     .SingleOrDefaultAsync(r => r.Id == recipeId);
-
+            foreach(var i in recipeInDb.Ingridients)
+            {
+                this.data.IngridientInRecipes.Remove(i);
+            }
             if (recipeInDb != null)//Brisanje recepata iz svih jela
             {
                 data.Recipes.Remove(recipeInDb);
                 data.SaveChanges();
             }
         }
-    
+        //dodato
+        public async Task UpdateRecipeAsync(RecipeWithDishUpdateInputModel model, int recipeId)
+        {
+            var recipeInDb = await data.Recipes.FindAsync(recipeId);
+
+            recipeInDb.Name = model.Name;
+            recipeInDb.Picture = model.Picture;
+            recipeInDb.WayOfPreparing = model.WayOfPreparing;
+            recipeInDb.Preview = model.Preview;
+            recipeInDb.PreparationTime = model.PreparationTime;
+
+
+            data.Update(recipeInDb);
+            await data.SaveChangesAsync();
+
+        }
+
     }
 }

@@ -11,6 +11,6 @@ namespace Quhinja.Services.Mappings.InputMappings
         public int UserId { get; set; }
 
         public string com { get; set; }
-        public DateTime DateOfComment { get; set; }
+        
     }
 }

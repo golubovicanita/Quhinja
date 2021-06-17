@@ -163,6 +163,9 @@ namespace Quhinja.Data.Migrations
                     b.Property<float?>("averageRating")
                         .HasColumnType("real");
 
+                    b.Property<int?>("numOfComments")
+                        .HasColumnType("int");
+
                     b.Property<int>("selectedRecipeId")
                         .HasColumnType("int");
 
@@ -270,9 +273,6 @@ namespace Quhinja.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("DateOfComment")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("DishId")
                         .HasColumnType("int");
@@ -390,7 +390,7 @@ namespace Quhinja.Data.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "09c129f8-e270-415e-a0d2-f6b3c4d7e73b",
+                            ConcurrencyStamp = "748c81cd-250b-4fd9-87f0-0330f65735ae",
                             Name = "admin",
                             NormalizedName = "ADMIN",
                             RoleDescription = "admin"
@@ -398,7 +398,7 @@ namespace Quhinja.Data.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "6c1e7a9c-e9e9-4b7d-8e81-edbb6de192b7",
+                            ConcurrencyStamp = "7310e121-22f8-41a0-8f9a-c047acb80285",
                             Name = "user",
                             NormalizedName = "USER",
                             RoleDescription = "user"
@@ -509,9 +509,9 @@ namespace Quhinja.Data.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "fb682c4a-afe2-42e4-a276-cf2377618d12",
-                            DateOfBirth = new DateTime(2021, 6, 16, 11, 29, 53, 518, DateTimeKind.Local).AddTicks(1937),
-                            DateOfEmployment = new DateTime(2021, 6, 16, 11, 29, 53, 530, DateTimeKind.Local).AddTicks(8700),
+                            ConcurrencyStamp = "9b9bc3d6-3c8f-4aa3-a3b2-123ed9096815",
+                            DateOfBirth = new DateTime(2021, 6, 17, 20, 33, 46, 878, DateTimeKind.Local).AddTicks(6802),
+                            DateOfEmployment = new DateTime(2021, 6, 17, 20, 33, 46, 892, DateTimeKind.Local).AddTicks(997),
                             Email = "srdjan.arsic@quadrixsoft.com",
                             EmailConfirmed = false,
                             Gender = 1,
@@ -630,7 +630,7 @@ namespace Quhinja.Data.Migrations
                     b.HasOne("Quhinja.Data.Entiities.Dish", "Dish")
                         .WithMany("UsersComments")
                         .HasForeignKey("DishId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Quhinja.Data.Entities.User", "User")
@@ -645,7 +645,7 @@ namespace Quhinja.Data.Migrations
                     b.HasOne("Quhinja.Data.Entiities.Dish", "Dish")
                         .WithMany("UsersRatings")
                         .HasForeignKey("DishId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Quhinja.Data.Entities.User", "User")
@@ -660,7 +660,7 @@ namespace Quhinja.Data.Migrations
                     b.HasOne("Quhinja.Data.Entiities.Dish", "Dish")
                         .WithMany("Recipes")
                         .HasForeignKey("DishId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
