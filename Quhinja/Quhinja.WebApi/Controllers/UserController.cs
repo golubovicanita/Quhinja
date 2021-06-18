@@ -126,5 +126,17 @@ namespace Quhinja.WebApi.Controllers
             await userService.UpdateUserAsync(userInputModel, userId);
             return Ok();
         }
+
+        [AllowAnonymous]
+        [HttpDelete]
+        [Route("deleteUserComments")]
+        public async Task<ActionResult> RemoveUserComments()
+        {
+            var userIdstring = this.User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value;
+            int.TryParse(userIdstring, out int userId);
+            await userService.RemoveUserCommentsAsync(userId);
+            return Ok();
+        }
+
     }
 }

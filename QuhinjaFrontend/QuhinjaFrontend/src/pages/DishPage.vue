@@ -1,107 +1,53 @@
 <template>
-  <q-page v-if="this.dish" class="bg-grey-4">
-    <div class="mainDiv">
-      <div
-        class="q-mt-xl leftDiv"
-        style="
-          border-style: none;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          width: 50%;
-        "
-      >
-        <div style="border-style: none; border-radius: 15px 15px 15px 15px">
-          <q-card
-            :ratio="16 / 9"
-            style="
-              background-color: #baa671;
-
-              border-style: none;
-              border-radius: 15px 15px 15px 15px;
-              width: 275px;
-            "
-            class="my-card bg-grey-4"
-          >
-            <q-img
-              style="
-                border-style: none;
-
-                border-radius: 15px 15px 0px 0px;
-              "
-              height="200px"
-              :src="this.dish.image"
-            />
-
-            <q-card-section
-              style="border-style: none; background-color: #baa671"
-            >
-              <div class="row no-wrap items-center">
-                <div class="col text-bold text-h6 ellipsis">
-                  {{ this.dish.name }}
-                </div>
-                <div class="text-brown-9 text-h6">
-                  {{ this.dish.averageRating | ParseFloat }}
-                </div>
-              </div>
-            </q-card-section>
-
-            <q-card-section
-              style="
-                background-color: #baa671;
-                border-style: none;
-                border-radius: 0px 0px 15px 15px;
-              "
-              class="q-pt-none"
-            >
-              <div
-                style="border-style: none"
-                class="text-bold text-subtitle1 text-brown-9"
-              >
-                {{ this.dish.dishType }}
-              </div>
-              <div style="border-style: none" class="text-caption text-brown-9">
-                {{ this.dish.description }}
-              </div>
-            </q-card-section>
-          </q-card>
+  <div class="q-pa-md row items-between q-gutter-md" style="width:100%">
+    <div class=" cards q-pa-sm">
+      <div class="col-8"  style="width:50%">
+        <div style="width:100%">
+        <div class="slika">
+          <q-img style="height: 200px" :src="this.dish.picture" />
         </div>
-        <div v-if="!this.admin">
-          <div class="q-mt-xl"></div>
-          <q-form @submit="onSubmit" class="q-gutter-md">
-            <template v-if="(this.dish.rate != 'Ne')" class="hidden1">
-            <div class="text-red-1 flex column q-mt-md">
-              <q-rating
-                class="q-mb-md"
-                v-model="usersRatingFromBase"
-                max="5"
-                size="4em"
-                color="brown"
-                icon="star_border"
-                icon-selected="star"
-                icon-half="star_half"
-                no-dimming
-              />
-              <div>
-                <q-btn
-                  label="Oceni"
-                  enable="false"
-                  type="submit"
-                  color="red-1"
-                />
-              </div>
-                <div v-if="usersRatingFromBase != 0"></div>
-                <div v-else>Niste ocenili ovo jelo</div>
-             
-            </div>
-             </template>
-          </q-form>
+        <div class="row  name text-h6 q-py-md">
+          <div class="col-6">
+            {{ this.dish.name }}
+          </div>
+          <div class="col-6">{{ this.dish.dishType }} jelo</div>
         </div>
-      </div>
-      <q-separator cl v-if="$q.screen.gt.sm" vertical />
+        <div class="row ">
+          <div v-if="!this.admin">
+            <q-form @submit="onSubmit" class="q-gutter-md">
+              <template v-if="this.dish.rate != 'Ne'" class="hidden1">
+                <div class="text-red-1  col-8">
+                  <q-rating
+                    class="q-mb-md"
+                    v-model="usersRatingFromBase"
+                    max="5"
+                    size="4em"
+                    color="yellow"
+                    icon="star_border"
+                    icon-selected="star"
+                    icon-half="star_half"
+                    no-dimming
+                  />
+                  <q-item-label
+                    class="text-h4 text-weight-medium q-pb-sm q-pl-sm q-mt-sm"
+                    style="color: yellow"
+                    >{{ this.dish.averageRating }}</q-item-label
+                  >
+                </div>
+                <div class="col-4 column align-center">
+                  <q-btn
+                    label="Oceni"
+                    enable="false"
+                    type="submit"
+                    color="red-1"
+                  />
+                </div>
+              </template>
+            </q-form>
+          </div>
+        </div>
+        <div class="name text-h6 q-pt-md">Recepti</div>
 
-      <div class="q-mt-xl rightDiv" style="width: 50%">
         <div
           v-if="showRecipeList"
           style="display: flex; align-items: center; justify-content: center"
@@ -121,12 +67,7 @@
                 clickable
                 @click="handleShowRecipe(recipe)"
                 class="q-mb-md itemForRecipe"
-                style="
-                  background-color: #7d7962;
-                  width: 300px;
-                  height: 100px;
-                  border-radius: 15px 15px 15px 15px;
-                "
+                style="background-color: #7d7962; width: 100%; height: 30px"
                 tag="label"
                 v-ripple
               >
@@ -155,101 +96,62 @@
                 <label for="checkbox1"></label>
               </div>
             </div>
-            <div>
-              <q-item
-                clickable
-                @click="handleAddRecipe"
-                class="q-mb-md bg-red-2 itemForRecipe"
-                style="
-                  width: 300px;
-                  height: 100px;
-                  border-radius: 15px 15px 15px 15px;
-                  display: flex;
-                  flex-direction: column;
-                  align-items: center;
-                  justify-content: center;
-                "
-              >
-                <q-icon class="text-grey-4" size="70px" name="add"></q-icon>
-              </q-item>
-            </div>
           </q-list>
         </div>
-        <div v-if="showDetailsForRecipe" v-model="recipeToShow">
-          <div class="q-ml-md mainForRecipe">
-            <div style="font-size: 20px">
-              <p class="text-brown-9">{{ recipeToShow.name }}</p>
+        <div>
+          {{ this.dish.description }}
+        </div>
+      </div>
+      </div>
+      <div class="col-4 column items-center " style= "width:50%" >
+        <div v-for="el1 in user" :key="el1">
+          <div v-for="el in comments" :key="el">
+            <div class="q-pa-md name text-h8 text-weight-medium">
+              Komentar postavio:
+              <div class="text-h6">{{ el1 }}</div>
             </div>
-            <div class="topDiv">
-              <q-img
-                class="q-mr-md"
-                style="max-width: 250px; border-radius: 0px 15px 15px 0px"
-                :src="recipeToShow.image"
-              >
-              </q-img>
-              <q-list
-                bordered
-                class="q-mr-sm bg-grey-5 rounded-borders"
-                style="
-                  max-width: 600px;
-                  color: #6f6e57;
-                  border-radius: 15px 15px 15px 15px;
-                "
-              >
-                <q-item-label style="width: 345px; color: black" header
-                  >Sastojci:</q-item-label
-                >
-
-                <q-item
-                  style="width: 345px"
-                  v-for="ing in recipeToShow.ingridients"
-                  :key="ing.ingridient.name"
-                >
-                  <q-item-section top class="gt-sm">
-                    <q-item-label class="q-mt-sm"
-                      >{{ ing.ingridient.name }} : {{ ing.quantity }} :
-                      {{ ing.unit }}</q-item-label
-                    >
-                  </q-item-section>
-                </q-item>
-              </q-list>
-            </div>
-            <div style="color: #6f6e57" class="middleDiv q-mt-sm">
-              <p>Vreme pripreme: {{ recipeToShow.preparationTime }}</p>
-              <p>
-                Link:
-                <a :href="recipeToShow.preview">{{ recipeToShow.preview }}</a>
-              </p>
-            </div>
-            <div class="q-mt-sm">
-              <q-input
-                readonly
-                v-model="recipeToShow.wayOfPreparing"
-                filled
-                type="textarea"
-              />
+            <div class="q-pa-md text-h7 name text-weight-medium">
+              Komentar:
+              <div class="text-h6">{{ el }}</div>
             </div>
           </div>
-          <q-btn
-            class="q-ml-sm q-mt-sm"
-            style="background-color: #6f6e57"
-            icon="keyboard_backspace"
-            label="Vidi ostale recepte"
-            @click="
-              showRecipeList = true;
-              showDetailsForRecipe = false;
+        </div>
+        <div class="row justify-between q-py-md">
+          <q-input filled v-model="noviCom" label="Napisite komentar" />
+          <div class="q-mt-lg q-pl-sm" @click="addComm">
+            <q-img class="pic" src="../../public/add.png" />
+          </div>
+        </div>
+        <div class="row justify-around">
+          <q-item
+            clickable
+            @click="handleAddRecipe"
+            class="q-mb-md bg-red-2 itemForRecipe"
+            style="
+              width: 100%;
+              display: flex;
+              flex-direction: column;
+              align-items: space-between;
+              justify-content: center;
             "
-          />
+          >
+            <q-icon class="text-grey-4" size="20px" name="add"></q-icon>
+          </q-item>
+        </div>
+
+        <div class="row" @click="deleteDish">
+          <q-img class="pic" src="../../public/trash.png" />
         </div>
       </div>
     </div>
-  </q-page>
+  </div>
 </template>
 <script>
 import { baseUrl } from "../services/apiConfig";
 export default {
   data() {
     return {
+      noviCom: "",
       val: null,
       dish: null,
       color: "",
@@ -261,9 +163,41 @@ export default {
       userData: {},
       admin: false,
       model: [],
+      comments: [],
+      user: [],
     };
   },
   methods: {
+    deleteDish() {
+      this.$store
+        .dispatch("apiRequest/deleteApiRequest", {
+          url: `Dish/${this.$route.params.id}`,
+          successMessage: "Uspešno ste obrisali jelo",
+        })
+        .then((res) => {
+          this.returnToMain();
+        });
+    },
+    returnToMain() {
+      this.$router.push("/dishes");
+    },
+    addComm() {
+      const data = {
+        dishId: this.dish.id,
+        com: this.noviCom,
+        userId: parseInt(this.userData.id),
+      };
+      this.$store
+        .dispatch("apiRequest/postApiRequest", {
+          url: "Dish/addComment",
+          data: data,
+          successMessage: "Uspešno ste dodali komentar",
+        })
+        .then((res) => {
+          this.comments.push(this.noviCom);
+          this.getDish();
+        });
+    },
     handleShowRecipe(recipe) {
       this.showDetailsForRecipe = true;
       this.showRecipeList = false;
@@ -288,6 +222,26 @@ export default {
           this.dish.image = "data:image/png;base64," + this.dish.image;
 
           this.getRating();
+        });
+    },
+    getComments() {
+      this.$store
+        .dispatch("apiRequest/getApiRequest", {
+          url: `Dish/getCommentsForDish/${this.$route.params.id}`,
+        })
+        .then((res) => {
+          this.comments = [];
+          this.comments = res;
+        });
+    },
+    getUserForComments() {
+      this.$store
+        .dispatch("apiRequest/getApiRequest", {
+          url: `Dish/getUsersOfCommentsForDish/${this.$route.params.id}`,
+        })
+        .then((res) => {
+          this.user = [];
+          this.user = res;
         });
     },
     onSubmit() {
@@ -355,6 +309,8 @@ export default {
   created() {
     this.getDish();
     this.getUsersData();
+    this.getComments();
+    this.getUserForComments();
   },
 };
 </script>
@@ -362,11 +318,17 @@ export default {
 .mainDiv {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
 }
 
 .mainForRecipe {
   display: flex;
   flex-direction: column;
+}
+
+.slika {
+  max-height: 200px;
+  max-height: 200px;
 }
 
 .topDiv {
@@ -422,10 +384,26 @@ input[type=checkbox]:checked:after {
   font-weight: bold;
 }
 
-cards {
-  font-family: 'Open Sans';
-}
 .hidden1 {
   display: none;
+}
+
+.name {
+  color: #5c5840;
+}
+
+.cards {
+  justify-content: space-around;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  position: relative;
+  width:100%;
+  
+}
+
+.pic {
+  width: 20px;
+  height: 20px;
 }
 </style>

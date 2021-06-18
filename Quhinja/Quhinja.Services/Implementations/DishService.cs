@@ -60,15 +60,15 @@ namespace Quhinja.Services.Implementations
                 data.Update(CommFromBase);
 
             }
-            
+
             await data.SaveChangesAsync();
-            
+
 
         }
 
-        public async  Task<UsersCommentsForDishOutputModel> GetDishByIdAsync(int id)
+        public async Task<UsersCommentsForDishOutputModel> GetDishByIdAsync(int id)
         {
-            var dish = await data.Dishes.Include(dishh => dishh.Recipes).ThenInclude(r => r.Ingridients).ThenInclude(ing=>ing.Ingridient).SingleOrDefaultAsync(d => d.Id == id);
+            var dish = await data.Dishes.Include(dishh => dishh.Recipes).ThenInclude(r => r.Ingridients).ThenInclude(ing => ing.Ingridient).SingleOrDefaultAsync(d => d.Id == id);
             if (dish != null)
             {
                 return mapper.Map<UsersCommentsForDishOutputModel>(dish);
@@ -78,21 +78,22 @@ namespace Quhinja.Services.Implementations
 
 
 
-        public  async Task<ICollection<DishBasicOutputModel>> GetDishesAsync()
+        public async Task<ICollection<DishBasicOutputModel>> GetDishesAsync()
         {
             return await data.Dishes.Include(ing => ing.Recipes)
                           .Select(r => mapper.Map<DishBasicOutputModel>(r))
                           .ToListAsync();
         }
         //dodato
-        public  async Task<ICollection<string>> GetCommentsForDishAsync(int dishId)
+        public async Task<ICollection<string>> GetCommentsForDishAsync(int dishId)
         {
-            var comments= await data.UserCommentsForDish.Where(x=>x.DishId==dishId).Select(x => x.com).ToListAsync();
-            
+            var comments = await data.UserCommentsForDish.Where(x => x.DishId == dishId).Select(x => x.com).ToListAsync();
+
 
             var arrayOfComm = await data.UserCommentsForDish.Where(x => x.DishId == dishId).ToListAsync();
             var dish = await data.Dishes.FindAsync(dishId);
-            int lenght = arrayOfComm.Count();
+            int lenght = 0;
+            lenght = arrayOfComm.Count();
             dish.numOfComments = lenght;
             await data.SaveChangesAsync();
 
@@ -119,38 +120,112 @@ namespace Quhinja.Services.Implementations
         }
 
 
-
+        //fja ne radi 
         public async Task RemoveDishAsync(int dishId)
         {
             var dishInDb = await data.Dishes
-                        .Include(x=>x.UsersComments).Include(x=>x.UsersRatings).Include(ing => ing.Recipes).ThenInclude(x=>x.Ingridients)
-                        .SingleOrDefaultAsync(ing => ing.Id == dishId);
-            var recept = await data.Recipes.Where(x => x.DishId == dishId).Include(x=>x.Ingridients).ToListAsync();
-           
-            foreach(var r in recept)
+                         .Include(x => x.UsersComments).Include(x => x.UsersRatings).Include(x => x.Recipes)
+                         .SingleOrDefaultAsync(ing => ing.Id == dishId);
+
+            var recept = await data.Recipes.Where(x => x.DishId == dishId).ToListAsync();
+            var comm = await data.UserCommentsForDish.Where(x => x.DishId == dishId).ToListAsync();
+            var rating = await data.UsersRatingForDishes.Where(x => x.DishId == dishId).ToListAsync();
+            var dish = await data.Dishes.Where(x => x.Id == dishId).Include(x => x.Recipes).ToListAsync();
+            if (recept.Count() != 0)
             {
-                foreach(var i in r.Ingridients)
+                foreach (var rr in recept)
                 {
-                    this.data.IngridientInRecipes.Remove(i);
+                    /*if (rr.Ingridients.Count() != 0)
+                    {
+                        foreach (var i in rr.Ingridients)
+                        {
+                            this.data.IngridientInRecipes.Remove(i);
+
+                        }
+                    }
+                    else
+                    {*/
+                    rr.DishId = 0;
+                    rr.Dish = null;
+                    this.data.Update(rr);
+                    this.data.SaveChanges();
+
                 }
-                this.data.Recipes.Remove(r);
+
             }
+
+
+            if (dish.Count() != 0)
+            {
+                foreach (var ii in dish)
+                {
+                    ii.selectedRecipeId = 0;
+                    ii.selectedRecipe = null;
+                    this.data.Update(ii);
+                    this.data.SaveChanges();
+                }
+            }
+            if (comm.Count() != 0)
+            {
+                foreach (var rr in comm)
+                {
+
+                    rr.DishId = 0;
+                    rr.Dish = null;
+                    this.data.Update(rr);
+                    this.data.SaveChanges();
+                }
+            }
+            if (rating.Count() != 0)
+            {
+                foreach (var rr in rating)
+                {
+
+                    rr.DishId = 0;
+                    rr.Dish = null;
+                    this.data.Update(rr);
+                    this.data.SaveChanges();
+
+                }
+            }
+
+
+
+
             if (dishInDb != null)//Brisanje jela iz svih recepata
             {
                 data.Dishes.Remove(dishInDb);
                 data.SaveChanges();
+
+
+
             }
-            
-
         }
-      /*  public async Task AddImageBytesAsync ( int dishId, byte [] image)
+    
+
+    /*  public async Task AddImageBytesAsync ( int dishId, byte [] image)
+      {
+          var dish = await data.Dishes.FindAsync(dishId);
+          dish.Image =image;
+          data.SaveChanges();
+
+      }
+    */
+    //dodato
+        public async Task RemoveCommentAsync(int commId)
         {
-            var dish = await data.Dishes.FindAsync(dishId);
-            dish.Image =image;
-            data.SaveChanges();
+            var commInDb = await data.UserCommentsForDish
+                                    .Include(r => r.Dish)
+                                    .SingleOrDefaultAsync(x=>x.Id==commId);
+        
+            if (commInDb != null)//Brisanje komentara
+            {
+                data.UserCommentsForDish.Remove(commInDb);
+                data.SaveChanges();
+            }
 
         }
-      */
+
         public async Task AddImageToDishAsync(int dishId, string path)
         {
             var dish = await data.Dishes.FindAsync(dishId);

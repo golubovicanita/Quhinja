@@ -251,6 +251,7 @@
               <label class="text-h6 name q-py-sm">Opis jela</label>
               <div class="q-pt-md">
                 <q-input
+               
                   v-model="opis"
                   filled
                   type="textarea"
@@ -265,6 +266,7 @@
                 flat
                 label="Dodaj jelo i recept"
                 @click="addDish"
+                 type="submit"
                 v-close-popup
               />
             </q-card-actions>
@@ -380,6 +382,7 @@ export default {
         dishId: this.idDish,
         WayOfPreparing: "",
         preview: this.link,
+        picture: this.image,
         preparationTime: this.vratiVreme(),
       };
       console.log(dataRecept);

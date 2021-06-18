@@ -35,5 +35,6 @@ namespace Quhinja.Services.Interfaces
 
         //dodato
         Task UpdateDishAsync(DishUpdateInputModel model, int dishId);
+        Task RemoveCommentAsync(int comId);
     }
 }

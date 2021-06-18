@@ -1,35 +1,51 @@
 <template>
-  <q-page class="column items-center q-gutter-y-none bg-grey-4">
-    <div class="q-mb-md text-h5 text-brown-9 q-mt-sm items-center column firstDiv">
-      <u>Danas na meniju</u>
-    </div>
+  <q-page class="column q-gutter-y-none bg-white">
+    <p class="label q-ml-md text-h4 text-bold">Danas na meniju</p>
 
-    <div v-if="this.todaysMenu" class="bg-red-2 menu">
-      <div class="q-mt-md q-mr-md leftDiv">
-        <div v-if="this.todaysMenu.recipe" class="q-ml-md pictureDiv">
-          <q-img
-            style="border-radius: 15px 15px 15px 15px; height: 300px"
-            :src="todaysMenu.recipe.image"
-          ></q-img>
-
-          <div
-            style="font-size: 24px"
-            class="q-mt-md text-bold text-brown-9 middleDiv q-m-sm q-ml-md"
-          >
-            <p>{{ this.todaysMenu.recipe.dish.name }}</p>
-          </div>
+    <div v-if="this.todaysMenu" class="bg-white column justify-between">
+      <div class="col-6 q-mt-md q-mr-md" style="width:50%">
+        <div v-if="this.todaysMenu.recipe" class="q-ml-md">
+          <q-img :src="this.todaysMenu.recipe.dish.picture"></q-img>
         </div>
       </div>
-      <q-separator vertical class="q-ml-md bg-red-2" />
 
-      <div class="rightDiv q-mt-md q-mr-md">
+      <div class="col-6 full-width q-pl-xl q-mt-md q-mr-md" style="width:50%">
+        <div
+          style="font-size: 24px"
+          class="q-mt-md text-bold label q-m-sm q-ml-md"
+        >
+          <p>{{ this.todaysMenu.recipe.dish.name }}</p>
+        </div>
+        <div class="row text-red-1">
+          <q-rating
+            class="q-mb-lg"
+            v-model="this.todaysMenu.recipe.dish.averageRating"
+            max="5"
+            size="3em"
+            color="yellow"
+            icon="star_border"
+            icon-selected="star"
+            icon-half="star_half"
+            no-dimming
+            readonly
+          />
+          <q-item-label
+            class="text-h5 q-pb-sm q-pl-sm q-mt-sm"
+            style="color: yellow"
+            >{{ this.todaysMenu.recipe.dish.averageRating }}</q-item-label
+          >
+        </div>
+        <div class="label text-h7 q-pl-md">
+          {{ this.todaysMenu.recipe.dish.numOfComments }} Comments
+        </div>
         <q-list
           v-if="this.todaysMenu.recipe"
-          bordered
-          class="q-mr-sm itemForIng bg-red-1 rounded-borders"
-          style="color: #6f6e57; border-radius: 15px 15px 15px 15px"
+          class="q-mr-sm itemForIng"
+          style="color: #5c5840"
         >
-          <q-item-label class="itemForIng text-bold" header>Sastojci:</q-item-label>
+          <q-item-label class="itemForIng label text-h6 text-bold" header
+            >Sastojci:</q-item-label
+          >
           <q-scroll-area style="height: 100px">
             <div class="flex column itemDiv">
               <q-item
@@ -40,7 +56,7 @@
                 <q-item-section top>
                   <q-item-label
                     style="white-space: nowrap"
-                    class="text-red-2 text-bold q-mt-sm"
+                    class="text-h7 label text-bold q-mt-sm"
                     >{{ ing.ingridient.name }} : {{ ing.quantity }}
                     {{ ing.unit }}</q-item-label
                   >
@@ -50,21 +66,21 @@
           </q-scroll-area>
         </q-list>
         <div v-if="this.todaysMenu.recipe" class="q-mt-sm">
-          <q-scroll-area style="height: 500px">
+          <q-scroll style="height: 500px">
             <q-input
               readonly
               class="way"
               v-model="this.todaysMenu.recipe.wayOfPreparing"
               autogrow
             />
-          </q-scroll-area>
+          </q-scroll>
         </div>
       </div>
     </div>
     <div class="text-black" v-else>Danas nema nicega na meniju</div>
-    <div class="q-mb-sm q-mt-md text-h5 text-brown-9">
-      <u> Najbolje ocenjena jela</u>
-    </div>
+
+    <p class="label q-pt-lg q-ml-md text-h4 text-bold">Najbolje ocenjena jela</p>
+
     <q-carousel
       v-if="this.dishes"
       v-model="selectedDishIndex"
@@ -110,7 +126,7 @@
                 <div
                   style="
                     text-overflow: ellipsis;
-                    white-space: nowrap;
+                    white-space: no-wrap;
                     overflow: hidden;
                     width: 100px;
                   "
@@ -122,8 +138,7 @@
 
               <q-card-actions style="position: relative" class="teal-3">
                 <div
-                  style="   text-bold;
-position:absolute; right:0;"
+                  style="text-bold; position:absolute; right:0;"
                   class="buttonDetails"
                   @click="handleClick(dishes[adjacentIndex].id)"
                   flat
@@ -214,13 +229,13 @@ export default {
 * {
   font-family: "Open Sans";
 }
-@media screen and (max-width: 1920px) {
+/*@media screen and (max-width: 1920px) {
   .menu {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
 
-    border-radius: 15px 15px 15px 15px;
+ 
     height: 400px;
     width: 1050px;
   }
@@ -246,7 +261,7 @@ export default {
   }
 }
 @media screen and (max-width: 1000px) {
-  . rightDiv {
+  .rightDiv {
     height: 200px;
     width: 200px;
   }
@@ -275,16 +290,19 @@ export default {
     height: 400px;
     width: 1000px;
   }
+}*/
+.label {
+  color: #5c5840;
 }
 .my-card {
   background-color: #baa671;
   color: #f1eae8;
 }
-.leftDiv {
+/*.leftDiv {
   display: flex;
   flex-direction: row;
   flex-grow: 1;
-}
+}*/
 .buttonDetails {
   margin-left: 0;
   transition: 0.2s ease-in-out 0s;

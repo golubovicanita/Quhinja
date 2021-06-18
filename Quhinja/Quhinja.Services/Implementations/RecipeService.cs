@@ -82,9 +82,18 @@ namespace Quhinja.Services.Implementations
             var recipeInDb = await data.Recipes
                                     .Include(r=>r.Ingridients)
                                     .SingleOrDefaultAsync(r => r.Id == recipeId);
-            foreach(var i in recipeInDb.Ingridients)
+            var dish = await data.Dishes.Where(x => x.selectedRecipeId == recipeId).Include(x => x.Recipes).ToListAsync();
+
+            
+            foreach (var i in recipeInDb.Ingridients)
             {
                 this.data.IngridientInRecipes.Remove(i);
+                
+            }
+            foreach(var ii in dish)
+            {
+                ii.selectedRecipeId = 0;
+                ii.selectedRecipe = null;
             }
             if (recipeInDb != null)//Brisanje recepata iz svih jela
             {

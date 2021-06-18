@@ -1,10 +1,10 @@
 <template>
-  <q-page class="bg-grey-4">
+  <q-page class="bg-white">
     <main v-if="admin" class="flexbox">
-      <div class="flex column" style="width: 100%; max-width: 1000px">
-        <h5 class="text-brown q-mb-sm"><u>Menu za dve nedelje</u></h5>
+      <div class="flex col-6">
+        <h5 class="label q-pt-lg"><u>Menu za dve nedelje</u></h5>
 
-        <div class="flex column daysBox bg-red-2">
+        <div class="flex column daysBox">
           <div
             class="flex row"
             style="justify-content: center; align-items: center; height: 85px"
@@ -15,7 +15,11 @@
             :key="index"
           >
             <div
-              :style="day.flag == false ? 'background-color:white; color:#6f6e57;' : ''"
+              :style="
+                day.flag == false
+                  ? 'background-color:white; color:#6f6e57;'
+                  : ''
+              "
               class="divForDate"
             >
               <p>
@@ -36,14 +40,16 @@
               <Card
                 class="q-mb-sm"
                 :style="
-                  day.flag2 == false ? 'background-color:grey' : 'background-color:white;'
+                  day.flag2 == false
+                    ? 'background-color:grey'
+                    : 'background-color:white;'
                 "
               >
                 <q-img
                   width="65px"
                   :style="day.flag2 == false ? 'filter:grayscale(80%);' : ''"
-                  style="border-radius: 10px 10px 10px 10px; height: 100%"
-                  :src="day.menuItem.recipe.image"
+                  style="height: 100%"
+                  :src="day.menuItem.recipe.picture"
                 ></q-img>
                 <p class="text-red-1 q-ml-md" style="margin-auto">
                   {{ day.menuItem.recipe.dish.name }}
@@ -72,16 +78,17 @@
         </div>
       </div>
 
-      <q-separator vertical class="q-ml-xl q-mr-xl" />
-      <div id="board-10" class="board" @dragover.prevent @drop.prevent="drop">
-        <div class="text-brown">
+      <div
+        id="board-10"
+        class="board col-6 column"
+        @dragover.prevent
+        @drop.prevent="drop"
+      >
+        <div class="label">
           <h5><u>Lista jela</u></h5>
         </div>
 
-        <div
-          class="bg-red-2 q-ma-md q-ml-sm"
-          style="border-radius: 15px 15px 15px 15px; width: 300px"
-        >
+        <div class="bg-white q-ma-md q-ml-sm" style="width: 300px">
           <q-scroll-area style="height: 250px; max-width: 600px">
             <Card
               v-for="(dish, index) in dishes"
@@ -91,82 +98,75 @@
             >
               <q-img
                 width="65px"
-                style="border-radius: 10px 10px 10px 10px; height: 100%"
-                :src="dish.image"
+                style="height: 100%"
+                :src="dish.picture"
               ></q-img>
 
               <p class="text-red-1 q-ml-md">{{ dish.name }}</p>
             </Card>
           </q-scroll-area>
         </div>
-        <div style="width: 400px" class="notice text-brown">
-          <h5><u>Podsetnik</u></h5>
-
-          <div class="q-pa-md" style="max-width: 400px">
-            <q-list bordered>
-              <q-item clickable v-ripple>
-                <q-item-section avatar>
-                  <q-icon color="primary" name="cake" class="text-brown" />
-                </q-item-section>
-
-                <q-item-section>Rođendani</q-item-section>
-              </q-item>
-
-              <q-item v-for="user in todayBirthUsers" :key="user.id" clickable v-ripple>
-                <q-item-section avatar>
-                  <q-avatar>
-                    <img :src="user.image" />
-                  </q-avatar>
-                </q-item-section>
-                <q-item-section
-                  >{{ user.name }} : {{ user.dateOfBirth | ParseDate2 }}</q-item-section
-                >
-              </q-item>
-            </q-list>
+        <div class="row q-pt-lg">
+          <div class="col-1">
+            <q-img class="pic q-pt-sm" src="../../public/add.png" />
           </div>
-          <div class="q-pa-md" style="max-width: 400px">
-            <q-list bordered>
-              <q-item clickable v-ripple>
-                <q-item-section avatar>
-                  <q-icon color="primary" name="today" class="text-brown" />
-                </q-item-section>
-
-                <q-item-section>Godišnjica u firmi</q-item-section>
-              </q-item>
-
-              <q-item
-                v-for="user in todayEmployeeDateUsers"
-                :key="user.id"
-                clickable
-                v-ripple
-              >
-                <q-item-section avatar>
-                  <q-avatar>
-                    <img :src="user.image" />
-                  </q-avatar>
-                </q-item-section>
-                <q-item-section
-                  >{{ user.name }} :
-                  {{ user.dateOfEmployment | ParseDate2 }}</q-item-section
-                >
-              </q-item>
-            </q-list>
+          <div class="col-7">
+            <div class="label text-h7">Dodaj novo jelo</div>
+          </div>
+          <div class="col-1">
+            <q-img class="pic q-pt-sm" src="../../public/trash.png" />
+          </div>
+          <div class="col-3">
+            <div class="label text-h7">Obrisi</div>
+          </div>
+        </div>
+        <div class="label q-pt-md text-bold text-h5">Posebni datumi</div>
+        <div class="row q-pt-lg">
+          <div class="col-1">
+            <q-img class="pic q-pt-sm" src="../../public/cake.png" />
+          </div>
+          <div class="col-5">
+            <div class="label text-h7">Rodjendani</div>
+          </div>
+          <div class="col-1">
+            <q-img class="pic q-pt-sm" src="../../public/champagne.png" />
+          </div>
+          <div class="col-5">
+            <div class="label text-h7">Godisnjica u firmi</div>
           </div>
         </div>
       </div>
     </main>
-    <main v-else class="flexbox">
-      <div class="flex column" style="width: 100%; max-width: 1000px">
-        <h5 class="text-brown q-mb-sm"><u>Trenutna nedelju</u></h5>
-        <div style="height: 75%; width: 110%" class="flex column daysBox bg-red-2">
+    <main v-else class="row">
+      <div class="row
+                  justify-around
+                  text-weight-medium text-h6
+                  name
+                  q-mt-lg">
+        <div class="col-6 label text-h5">Trenutna nedelja</div>
+        <div class="col-6 label text-h5">Naredna nedelja</div>
+      </div>
+      <div class="row
+                  justify-around
+                  text-weight-medium text-h6
+                  name
+                  q-mt-lg">
+        <div class="col-6">
           <div
             class="flex row"
             style="justify-content: center; align-items: center; height: 85px"
-            v-for="(day, index) in days.slice((1 - 1) * daysPerPage, 1 * daysPerPage)"
+            v-for="(day, index) in days.slice(
+              (1 - 1) * daysPerPage,
+              1 * daysPerPage
+            )"
             :key="index"
           >
             <div
-              :style="day.flag == false ? 'background-color:white; color:#6f6e57;' : ''"
+              :style="
+                day.flag == false
+                  ? 'background-color:white; color:#6f6e57;'
+                  : ''
+              "
               class="divForDate"
             >
               <p>
@@ -181,42 +181,47 @@
               :id="`${day.day}`"
               @dragover.prevent
               @drop.prevent="drop"
-              bg-color="brown"
+              bg-color="#5c5840"
             ></div>
             <div class="boardMenu" v-if="day.menuItem != null">
               <Card
                 class="q-mb-sm"
                 :style="
-                  day.flag2 == false ? 'background-color:grey' : 'background-color:white;'
+                  day.flag2 == false
+                    ? 'background-color:color: #5c5840;'
+                    : 'background-color:white;'
                 "
               >
                 <q-img
                   width="65px"
                   :style="day.flag2 == false ? 'filter:grayscale(80%);' : ''"
-                  style="border-radius: 10px 10px 10px 10px; height: 100%"
-                  :src="day.menuItem.recipe.image"
+                  style="height: 100%"
+                  :src="day.menuItem.recipe.picture"
                 ></q-img>
-                <p class="text-red-1 q-ml-md" style="margin-auto">
+                <p class="text-brown q-ml-md" style="margin-auto">
                   {{ day.menuItem.recipe.dish.name }}
                 </p>
               </Card>
             </div>
           </div>
         </div>
-      </div>
-
-      <q-separator vertical class="q-ml-xl q-mr-xl" />
-      <div class="flex column" style="width: 100%; max-width: 1000px">
-        <h5 class="text-brown q-mb-sm"><u>Naredna nedelja</u></h5>
-        <div style="height: 75%; width: 110%" class="flex column daysBox bg-red-2">
+        
+        <div class="col-6">
           <div
             class="flex row"
             style="justify-content: center; align-items: center; height: 85px"
-            v-for="(day, index) in days.slice((2 - 1) * daysPerPage, 2 * daysPerPage)"
+            v-for="(day, index) in days.slice(
+              (2 - 1) * daysPerPage,
+              2 * daysPerPage
+            )"
             :key="index"
           >
             <div
-              :style="day.flag == false ? 'background-color:white; color:#6f6e57;' : ''"
+              :style="
+                day.flag == false
+                  ? 'background-color:white; color:#6f6e57;'
+                  : ''
+              "
               class="divForDate"
             >
               <p>
@@ -237,14 +242,16 @@
               <Card
                 class="q-mb-sm"
                 :style="
-                  day.flag2 == false ? 'background-color:grey' : 'background-color:white;'
+                  day.flag2 == false
+                    ? 'background-color:#6f6e57'
+                    : 'background-color:white;'
                 "
               >
                 <q-img
                   width="65px"
                   :style="day.flag2 == false ? 'filter:grayscale(80%);' : ''"
-                  style="border-radius: 10px 10px 10px 10px; height: 100%"
-                  :src="day.menuItem.recipe.image"
+                  style="height: 100%"
+                  :src="day.menuItem.recipe.picture"
                 ></q-img>
                 <p class="text-red-1 q-ml-md" style="margin-auto">
                   {{ day.menuItem.recipe.dish.name }}
@@ -317,8 +324,8 @@ export default {
             var date = moment(el.day).format("D");
             var month = moment(el.day).format("M");
             if (el.menuItem != null)
-              el.menuItem.recipe.image =
-                "data:image/png;base64," + el.menuItem.recipe.image;
+              el.menuItem.recipe.picture =
+                "data:picture/png;base64," + el.menuItem.recipe.picture;
             // date = parseInt(date);
             if (today == date) el.flag = false;
             else el.flag = true;
@@ -376,12 +383,14 @@ export default {
     },
 
     getUsersData() {
-      this.$store.dispatch("apiRequest/getApiRequest", { url: "user/0" }).then((res) => {
-        this.userData = res;
-        this.userData.image = "data:image/png;base64," + this.userData.image;
+      this.$store
+        .dispatch("apiRequest/getApiRequest", { url: "user/0" })
+        .then((res) => {
+          this.userData = res;
+          this.userData.image = "data:image/png;base64," + this.userData.image;
 
-        this.check();
-      });
+          this.check();
+        });
     },
 
     getTodayUsersData() {
@@ -432,9 +441,7 @@ export default {
 .daysBox {
   width: 100%;
   justify-content: center;
-
   margin-right: 100px;
-  border-radius: 15px 15px 15px 15px;
 }
 @media screen and (max-height: 1000px) {
   .day {
@@ -447,10 +454,19 @@ export default {
     justify-content: center;
     padding: 15px;
     background-color: #6f6e57;
-    border-radius: 15px 15px 15px 15px;
   }
 }
 @media screen and (max-height: 800px) {
+  .pic {
+    width: 19px;
+    height: 19px;
+  }
+  .picc {
+    height: 100px;
+  }
+  .label {
+    color: #5c5840;
+  }
   .day {
     display: flex;
     flex-direction: column;
@@ -458,7 +474,6 @@ export default {
     max-width: 300px;
     padding: 15px;
     height: 65px;
-    border-radius: 15px 15px 15px 15px;
   }
 }
 h5 {
@@ -470,8 +485,6 @@ h5 {
   max-width: 900px;
   height: 100vh;
   margin: 0 auto;
-  border-radius: 15px 15px 15px 15px;
-
   padding: 15px;
 }
 .flexbox .board {
@@ -480,18 +493,15 @@ h5 {
   width: 100%;
   max-width: 300px;
   padding: 15px;
-  border-radius: 15px 15px 15px 15px;
 }
 .flexbox .boardMenu {
   display: flex;
   flex-direction: row;
-  align-items: center;
-  justify-content: center;
-
+  align-items: start;
+  justify-content: start;
   width: 100%;
   max-width: 300px;
   padding: 15px;
-  border-radius: 15px 15px 15px 15px;
 }
 .divForDate {
   width: 65px;
@@ -500,7 +510,6 @@ h5 {
   flex-direction: column;
   align-items: center;
   margin-right: 20px;
-  border-radius: 15px 15px 15px 15px;
   border: solid #6f6e57;
   font-size: 30px;
 }
@@ -512,7 +521,6 @@ h5 {
   transition: 0.2s ease-in-out 0s;
 
   font-size: 20px;
-  border-radius: 15px 15px 15px 15px;
   height: 65px;
   width: 100%;
   align-items: center;
@@ -523,9 +531,7 @@ h5 {
 .flexbox .boardMenu .card {
   cursor: pointer;
   align-items: center;
-  text-color: red;
   font-size: 20px;
-  border-radius: 15px 15px 15px 15px;
   height: 65px;
   border: solid #6f6e57;
   width: 100%;

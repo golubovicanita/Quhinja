@@ -192,6 +192,16 @@ namespace Quhinja.WebApi.Controllers
             await dishService.UpdateDishAsync(dishInputModel, dishId);
             return Ok();
         }
+        //dodato
+        [AllowAnonymous]
+        [HttpDelete]
+        [Route("deleteComment")]
+        public async Task<ActionResult> RemoveComments(int id)
+        {
+            await dishService.RemoveCommentAsync(id);
+            return Ok();
+        }
+
     }
 }
 

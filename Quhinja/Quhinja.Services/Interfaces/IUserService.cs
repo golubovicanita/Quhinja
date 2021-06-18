@@ -20,6 +20,7 @@ namespace Quhinja.Services.Interfaces
 
         Task UpdateProfilePictureAsync(int userId, string profilePictureUrl);
         Task UpdateProfilePictureBytesAsync(int userId, byte [] profilePictureUrl);
+        Task RemoveUserCommentsAsync(int id);
 
     }
 }
